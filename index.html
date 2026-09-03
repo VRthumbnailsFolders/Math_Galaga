@@ -1014,8 +1014,14 @@
             <h1 class="intro-title">Math <span>Galaga</span></h1>
             <canvas id="intro-ship-canvas" width="260" height="220"></canvas>
             <p class="intro-rules">Trouve le vaisseau ennemi portant la <strong>bonne réponse</strong> ! Détruire un mauvais vaisseau vous fait perdre une vie. Les missiles détruisent un mauvais vaisseau sans vous pénaliser. Des bonus (Tir Double, Bouclier) peuvent apparaître !</p>
+            
+            <!-- Lien d'installation PWA Android -->
+            <div id="pwa-install-prompt" style="display: none; margin-bottom: 8px; cursor: pointer; text-decoration: underline; color: var(--neon-yellow); font-size: 0.95rem; font-weight: bold; text-shadow: 0 0 8px rgba(255, 230, 0, 0.6); letter-spacing: 0.5px; transition: transform 0.2s, color 0.2s;">
+                📲 <span id="pwa-install-text">Installer l'application sur votre appareil</span>
+            </div>
+
             <button class="menu-btn btn-intro-play" id="intro-play-btn">JOUER</button>
-            <div class="intro-credits">Christophe DELATTRE - 2026 v1.9</div>
+            <div class="intro-credits">Christophe DELATTRE - 2026 v2.0</div>
         </div>
 
         <!-- Menu Principal (Sommaire) -->
@@ -6207,6 +6213,48 @@
         }
 
         setupUIInteractiveSounds();
+
+        // --- GESTION DE L'INSTALLATION PWA (ANDROID & MOBILE) ---
+        let deferredPrompt = null;
+        const pwaInstallPrompt = document.getElementById('pwa-install-prompt');
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        const isMobileOrAndroid = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (navigator.maxTouchPoints && navigator.maxTouchPoints > 1);
+
+        // Afficher la phrase uniquement sur appareil mobile/Android et si pas déjà installé
+        if (isMobileOrAndroid && !isStandalone && pwaInstallPrompt) {
+            pwaInstallPrompt.style.display = 'block';
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (!isStandalone && isMobileOrAndroid && pwaInstallPrompt) {
+                pwaInstallPrompt.style.display = 'block';
+            }
+        });
+
+        if (pwaInstallPrompt) {
+            pwaInstallPrompt.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        pwaInstallPrompt.style.display = 'none';
+                    }
+                    deferredPrompt = null;
+                } else {
+                    // Fallback d'aide pour navigateurs (Brave, Firefox, Samsung Internet...)
+                    alert("Pour installer l'application sur votre appareil :\n\n1. Appuyez sur le menu (⋮ ou ☰) de votre navigateur.\n2. Choisissez 'Installer l'application' ou 'Ajouter à l'écran d'accueil'.");
+                }
+            });
+        }
+
+        window.addEventListener('appinstalled', () => {
+            if (pwaInstallPrompt) {
+                pwaInstallPrompt.style.display = 'none';
+            }
+            deferredPrompt = null;
+        });
 
         // --- ENREGISTREMENT DU SERVICE WORKER (PWA HORS-LIGNE & INSTALLABLE) ---
         if ('serviceWorker' in navigator) {
