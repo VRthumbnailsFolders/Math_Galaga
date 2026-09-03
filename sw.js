@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = 'math-galaga-v1.8';
+﻿const CACHE_NAME = 'math-galaga-v2.0';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -8,16 +8,15 @@ const ASSETS_TO_CACHE = [
   'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap'
 ];
 
-// Installation : mise en cache immédiate des fichiers nécessaires
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS_TO_CACHE);
-    }).then(() => self.skipWaiting())
+    })
   );
 });
 
-// Activation : nettoyage des anciens caches éventuels
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -32,29 +31,17 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Interception des requêtes : Stratégie Cache-First (Offline-First)
+// Stratégie Network-First : cherche d'abord la dernière version sur le réseau, sinon lit le cache
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
+    fetch(event.request).then((networkResponse) => {
+      if (networkResponse && networkResponse.status === 200) {
+        const responseClone = networkResponse.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
       }
-      return fetch(event.request).then((networkResponse) => {
-        // Mettre en cache dynamique les ressources supplémentaires si valides
-        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-          return networkResponse;
-        }
-        const responseToCache = networkResponse.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
-        });
-        return networkResponse;
-      }).catch(() => {
-        // En cas d'erreur réseau, fallback sur la page index si requête de navigation
-        if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
-      });
+      return networkResponse;
+    }).catch(() => {
+      return caches.match(event.request);
     })
   );
 });
