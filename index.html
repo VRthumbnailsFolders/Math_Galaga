@@ -434,6 +434,50 @@
             box-shadow: 0 0 15px var(--neon-blue);
         }
 
+        .table-chip-auto {
+            border-color: rgba(255, 230, 0, 0.4);
+            color: #ffae00;
+            position: relative;
+        }
+
+        .table-chip-auto.selected {
+            background: var(--neon-yellow) !important;
+            color: #000 !important;
+            border-color: var(--neon-yellow) !important;
+            box-shadow: 0 0 18px var(--neon-yellow) !important;
+        }
+
+        .table-chip.locked {
+            opacity: 0.4;
+            cursor: not-allowed !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+            color: #777 !important;
+            background: rgba(0, 0, 0, 0.3) !important;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Info-bulle personnalisée sur puce verrouillée */
+        .table-chip[data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 10, 25, 0.95);
+            border: 1px solid var(--neon-yellow);
+            color: #fff;
+            padding: 6px 12px;
+            font-size: 0.78rem;
+            font-weight: normal;
+            border-radius: 5px;
+            white-space: nowrap;
+            box-shadow: 0 0 10px rgba(255, 230, 0, 0.4);
+            z-index: 200;
+            pointer-events: none;
+            letter-spacing: 0.5px;
+        }
+
         /* Menu de configuration et scores disposés en colonnes */
         .menu-layout {
             display: flex;
@@ -1021,7 +1065,7 @@
             </div>
 
             <button class="menu-btn btn-intro-play" id="intro-play-btn">JOUER</button>
-            <div class="intro-credits">Christophe DELATTRE - 2026 v2.0</div>
+            <div class="intro-credits">Christophe DELATTRE - 2026 v2.1</div>
         </div>
 
         <!-- Menu Principal (Sommaire) -->
@@ -1108,22 +1152,25 @@
                 <div style="display: flex; align-items: center; gap: 15px; font-size: 1.2rem; width: 100%; justify-content: center;">
                     <span style="color: var(--neon-blue); text-shadow: 0 0 5px var(--neon-blue); font-weight: bold;">DEMARRAGE AU NIVEAU :</span>
                     <button class="menu-btn btn-novice" id="dec-startwave-btn" style="margin-top: 0; padding: 5px 15px; font-size: 1.2rem;">-</button>
-                    <span id="settings-startwave-val" style="font-weight: bold; font-size: 1.5rem; color: #fff; width: 30px; text-align: center;">1</span>
+                    <span id="settings-startwave-val" style="font-weight: bold; font-size: 1.5rem; color: #fff; min-width: 55px; text-align: center; display: inline-block;">1</span>
                     <button class="menu-btn btn-novice" id="inc-startwave-btn" style="margin-top: 0; padding: 5px 15px; font-size: 1.2rem;">+</button>
                 </div>
                 <div style="display: flex; align-items: center; gap: 15px; font-size: 1.2rem; width: 100%; justify-content: center;">
                     <span style="color: var(--neon-blue); text-shadow: 0 0 5px var(--neon-blue); font-weight: bold;">MUSIQUE :</span>
-                    <button class="menu-btn" id="toggle-music-btn" style="margin-top: 0; padding: 5px 15px; font-size: 1.1rem; width: 80px;">OUI</button>
+                    <button class="menu-btn" id="toggle-music-btn" style="margin-top: 0; padding: 6px 12px; font-size: 1.05rem; min-width: 90px; text-align: center; display: inline-flex; justify-content: center; align-items: center;">OUI</button>
                 </div>
                 <div style="display: flex; align-items: center; gap: 15px; font-size: 1.2rem; width: 100%; justify-content: center;">
                     <span style="color: #ffae00; text-shadow: 0 0 5px #ff5e00; font-weight: bold;">MODE BLAST :</span>
-                    <button class="menu-btn" id="toggle-blast-unlock-btn" style="margin-top: 0; padding: 5px 15px; font-size: 1.1rem; width: 150px; border-color: #ff5e00; color: #ffae00;">DÉBLOQUÉ</button>
+                    <button class="menu-btn" id="toggle-blast-unlock-btn" style="margin-top: 0; padding: 6px 16px; font-size: 1.05rem; min-width: 175px; border-color: #ff5e00; color: #ffae00; text-align: center; display: inline-flex; justify-content: center; align-items: center; white-space: nowrap;">DÉBLOQUÉ</button>
                 </div>
-                <button class="menu-btn" id="reset-scores-btn" style="border-color: var(--neon-pink); color: var(--neon-pink); box-shadow: 0 0 10px rgba(255, 0, 127, 0.2); width: 100%;">Réinitialiser les scores</button>
+                <div style="display: flex; align-items: center; gap: 15px; font-size: 1.2rem; width: 100%; justify-content: center; flex-wrap: wrap;">
+                    <button class="menu-btn" id="reset-scores-btn" style="margin-top: 0; padding: 6px 16px; font-size: 1.05rem; border-color: var(--neon-pink); color: var(--neon-pink); box-shadow: 0 0 10px rgba(255, 0, 127, 0.2); text-align: center; display: inline-flex; justify-content: center; align-items: center;">Réinitialiser les scores</button>
+                    <button class="menu-btn" id="reset-learning-btn" style="margin-top: 0; padding: 6px 16px; font-size: 1.05rem; border-color: var(--neon-yellow); color: var(--neon-yellow); box-shadow: 0 0 10px rgba(255, 230, 0, 0.2); text-align: center; display: inline-flex; justify-content: center; align-items: center;">Réinitialiser profil AUTO</button>
+                </div>
             </div>
             
             <div style="display: flex; gap: 15px; width: 60%; justify-content: center;">
-                <button class="menu-btn btn-novice" id="play-custom-settings-btn" style="border-color: var(--neon-blue); color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 240, 255, 0.4); flex: 1; display: none;">Lancer la partie</button>
+                <button class="menu-btn btn-novice" id="play-custom-settings-btn" style="border-color: var(--neon-blue); color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 240, 255, 0.4); flex: 1;">Lancer la partie</button>
                 <button class="menu-btn" id="close-settings-btn" style="border-color: #fff; color: #fff; box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); flex: 1;">Retour</button>
             </div>
         </div>
@@ -1136,6 +1183,13 @@
                 <p>Score Final : <span id="final-score">0</span></p>
                 <p>Dernière vague atteinte : <span id="final-wave">1</span></p>
                 <p>Calculs résolus : <span id="final-correct">0</span></p>
+            </div>
+
+            <!-- Bloc Conseils de Révision des Tables -->
+            <div id="revision-advice-box" style="margin: 12px auto; max-width: 540px; width: 90%; background: rgba(255, 0, 127, 0.12); border: 1.5px dashed var(--neon-pink); border-radius: 8px; padding: 10px 15px; text-align: center; box-shadow: 0 0 12px rgba(255, 0, 127, 0.25);">
+                <p id="revision-advice-text" style="color: #ffffff; font-size: 0.95rem; margin: 0; line-height: 1.45; font-family: inherit;">
+                    <!-- Rempli dynamiquement -->
+                </p>
             </div>
 
             <!-- Formulaire nouveau score -->
@@ -1223,16 +1277,51 @@
                 osc.start(now);
                 osc.stop(now + 0.4);
             } else if (type === 'explosion_fail') {
-                // Explosion grave d'erreur
+                // Détonation d'erreur très lourde, grave et puissante (alarme/buzz sombre de mauvaise réponse)
                 osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(300, now);
-                osc.frequency.linearRampToValueAtTime(60, now + 0.5);
+                osc.frequency.setValueAtTime(160, now);
+                osc.frequency.exponentialRampToValueAtTime(32, now + 0.65);
                 
-                gainNode.gain.setValueAtTime(0.4, now);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+                gainNode.gain.setValueAtTime(0.65, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.65);
                 
                 osc.start(now);
-                osc.stop(now + 0.6);
+                osc.stop(now + 0.65);
+
+                const oscSub = audioCtx.createOscillator();
+                const gainSub = audioCtx.createGain();
+                oscSub.type = 'triangle';
+                oscSub.frequency.setValueAtTime(80, now);
+                oscSub.frequency.linearRampToValueAtTime(24, now + 0.75);
+                oscSub.connect(gainSub);
+                gainSub.connect(audioCtx.destination);
+                gainSub.gain.setValueAtTime(0.6, now);
+                gainSub.gain.exponentialRampToValueAtTime(0.01, now + 0.75);
+                oscSub.start(now);
+                oscSub.stop(now + 0.75);
+            } else if (type === 'orb_explosion') {
+                // Détonation lourde et fracassante pour les boules et le Boss Final
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.exponentialRampToValueAtTime(35, now + 0.65);
+                
+                gainNode.gain.setValueAtTime(0.45, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.005, now + 0.65);
+                
+                osc.start(now);
+                osc.stop(now + 0.65);
+
+                const oscSub = audioCtx.createOscillator();
+                const gainSub = audioCtx.createGain();
+                oscSub.type = 'triangle';
+                oscSub.frequency.setValueAtTime(90, now);
+                oscSub.frequency.linearRampToValueAtTime(25, now + 0.7);
+                oscSub.connect(gainSub);
+                gainSub.connect(audioCtx.destination);
+                gainSub.gain.setValueAtTime(0.4, now);
+                gainSub.gain.exponentialRampToValueAtTime(0.005, now + 0.7);
+                oscSub.start(now);
+                oscSub.stop(now + 0.7);
             } else if (type === 'wave_start') {
                 // Petite mélodie ascendante rétro
                 osc.type = 'square';
@@ -1262,7 +1351,78 @@
             starsContainer.appendChild(star);
         }
 
-        // --- INTERFACE DE CONFIGURATION DES TABLES ---
+        // --- PROFIL D'APPRENTISSAGE ET STATISTIQUES PERSISTANTES ---
+        let totalWavesPlayed = parseInt(localStorage.getItem('math_galaga_total_waves_played')) || 0;
+        let isAutoModeUnlocked = (totalWavesPlayed >= 10);
+        let isAutoModeSelected = localStorage.getItem('math_galaga_auto_mode_selected') === 'true' && isAutoModeUnlocked;
+
+        // Statistiques par table : { '2': { errors: 0, successes: 0 }, ... '9': { ... } }
+        let tableLearningStats = {};
+        try {
+            const rawStats = localStorage.getItem('math_galaga_table_learning_stats');
+            if (rawStats) tableLearningStats = JSON.parse(rawStats);
+        } catch (e) {}
+
+        // Initialisation si vide (de 2 à 9)
+        for (let t = 2; t <= 9; t++) {
+            if (!tableLearningStats[t]) {
+                tableLearningStats[t] = { errors: 0, successes: 0 };
+            }
+        }
+
+        function saveLearningStats() {
+            try {
+                localStorage.setItem('math_galaga_table_learning_stats', JSON.stringify(tableLearningStats));
+                localStorage.setItem('math_galaga_total_waves_played', totalWavesPlayed);
+                localStorage.setItem('math_galaga_auto_mode_selected', isAutoModeSelected ? 'true' : 'false');
+            } catch (e) {}
+        }
+
+        function recordTableSuccess(table) {
+            if (table >= 2 && table <= 9) {
+                if (!tableLearningStats[table]) tableLearningStats[table] = { errors: 0, successes: 0 };
+                tableLearningStats[table].successes++;
+                saveLearningStats();
+            }
+        }
+
+        function recordTableError(table) {
+            if (table >= 2 && table <= 9) {
+                if (!tableLearningStats[table]) tableLearningStats[table] = { errors: 0, successes: 0 };
+                tableLearningStats[table].errors++;
+                saveLearningStats();
+            }
+        }
+
+        // Tirage intelligent pondéré en mode AUTO
+        function pickAutoAdaptiveTable() {
+            const tables = [2, 3, 4, 5, 6, 7, 8, 9];
+            // 30% du temps : consolidation positive aléatoire pour valoriser le joueur
+            if (Math.random() < 0.3) {
+                return tables[Math.floor(Math.random() * tables.length)];
+            }
+
+            // 70% du temps : tirage pondéré selon le ratio d'erreurs
+            // Formule de poids : (erreurs + 1) / (succès * 0.5 + 1)
+            let totalWeight = 0;
+            const weights = tables.map(t => {
+                const stat = tableLearningStats[t] || { errors: 0, successes: 0 };
+                const weight = (stat.errors + 1.2) / (stat.successes * 0.4 + 1);
+                totalWeight += weight;
+                return { table: t, weight: weight };
+            });
+
+            let randomVal = Math.random() * totalWeight;
+            for (const item of weights) {
+                if (randomVal < item.weight) {
+                    return item.table;
+                }
+                randomVal -= item.weight;
+            }
+            return tables[Math.floor(Math.random() * tables.length)];
+        }
+
+        // --- INTERFACE DE CONFIGURATION DES TABLES (×2 à ×9 + AUTO) ---
         const tablesGrid = document.getElementById('tables-grid');
         
         // Récupération de la sélection sauvegardée dans localStorage ou sélection par défaut
@@ -1281,31 +1441,87 @@
         function saveSelectedTables() {
             try {
                 localStorage.setItem('math_galaga_selected_tables', JSON.stringify(Array.from(selectedTables)));
+                localStorage.setItem('math_galaga_auto_mode_selected', isAutoModeSelected ? 'true' : 'false');
             } catch (e) {}
         }
 
-        for (let i = 2; i <= 10; i++) {
+        const tableChipElements = {};
+        let autoChipElement = null;
+
+        function refreshTablesSelectionUI() {
+            for (let i = 2; i <= 9; i++) {
+                if (tableChipElements[i]) {
+                    if (isAutoModeSelected) {
+                        tableChipElements[i].classList.remove('selected');
+                        tableChipElements[i].style.opacity = '0.5';
+                    } else {
+                        tableChipElements[i].style.opacity = '1';
+                        if (selectedTables.has(i)) {
+                            tableChipElements[i].classList.add('selected');
+                        } else {
+                            tableChipElements[i].classList.remove('selected');
+                        }
+                    }
+                }
+            }
+
+            if (autoChipElement) {
+                isAutoModeUnlocked = (totalWavesPlayed >= 10);
+                if (!isAutoModeUnlocked) {
+                    autoChipElement.classList.add('locked');
+                    autoChipElement.classList.remove('selected');
+                    autoChipElement.innerHTML = '🔒 AUTO';
+                    const remaining = Math.max(1, 10 - totalWavesPlayed);
+                    autoChipElement.setAttribute('data-tooltip', `Joue encore ${remaining} vague${remaining > 1 ? 's' : ''} pour débloquer le mode adaptatif AUTO !`);
+                } else {
+                    autoChipElement.classList.remove('locked');
+                    autoChipElement.removeAttribute('data-tooltip');
+                    autoChipElement.innerHTML = '⚡ AUTO';
+                    if (isAutoModeSelected) {
+                        autoChipElement.classList.add('selected');
+                    } else {
+                        autoChipElement.classList.remove('selected');
+                    }
+                }
+            }
+        }
+
+        // Création des puces manuelles ×2 à ×9
+        for (let i = 2; i <= 9; i++) {
             const chip = document.createElement('div');
             chip.className = 'table-chip';
-            if (selectedTables.has(i)) {
-                chip.classList.add('selected');
-            }
             chip.textContent = '× ' + i;
             chip.addEventListener('click', () => {
+                if (isAutoModeSelected) {
+                    isAutoModeSelected = false; // Désactive le mode AUTO si on clique sur une puce manuelle
+                }
                 if (selectedTables.has(i)) {
                     if (selectedTables.size > 1) { // Au moins une table doit rester cochée
                         selectedTables.delete(i);
-                        chip.classList.remove('selected');
-                        saveSelectedTables();
                     }
                 } else {
                     selectedTables.add(i);
-                    chip.classList.add('selected');
-                    saveSelectedTables();
                 }
+                saveSelectedTables();
+                refreshTablesSelectionUI();
             });
+            tableChipElements[i] = chip;
             tablesGrid.appendChild(chip);
         }
+
+        // Création de la 9ème puce : Bouton "AUTO"
+        autoChipElement = document.createElement('div');
+        autoChipElement.className = 'table-chip table-chip-auto';
+        autoChipElement.addEventListener('click', () => {
+            isAutoModeUnlocked = (totalWavesPlayed >= 10);
+            if (!isAutoModeUnlocked) return; // Verrouillé tant que < 10 vagues jouées
+            isAutoModeSelected = !isAutoModeSelected;
+            saveSelectedTables();
+            refreshTablesSelectionUI();
+        });
+        tablesGrid.appendChild(autoChipElement);
+
+        refreshTablesSelectionUI();
 
         // --- SYSTÈME DE JEU SUR CANVAS ---
         const canvas = document.getElementById('game-canvas');
@@ -1350,6 +1566,9 @@
         // Entités Boss
         let boss = null;
         let bossBombs = [];
+        let bossFinal = null;
+        let swarmShips = [];
+        let failedEquationsHistory = []; // Historique des calculs ratés (erreurs du joueur sur les vagues 1-99)
 
         // Système de Gel Temporel (Time Freeze & Slow Motion)
         let timeFreezeEndTime = 0;
@@ -1549,6 +1768,39 @@
                 gainNode.gain.exponentialRampToValueAtTime(0.005, now + 0.055);
                 osc.start(now);
                 osc.stop(now + 0.055);
+            } else if (type === 'swarm_eject') {
+                // Son d'éjection mécanique et pneumatique de petit vaisseau (souffle de tuyère + sifflement laser d'éjection)
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(450, now);
+                osc.frequency.exponentialRampToValueAtTime(90, now + 0.22);
+                
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(600, now);
+                filter.frequency.exponentialRampToValueAtTime(180, now + 0.22);
+                filter.Q.setValueAtTime(3.0, now);
+
+                gainNode.gain.setValueAtTime(0.28, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.005, now + 0.22);
+
+                osc.disconnect();
+                osc.connect(filter);
+                filter.connect(gainNode);
+
+                osc.start(now);
+                osc.stop(now + 0.22);
+
+                const oscWhoosh = audioCtx.createOscillator();
+                const gainWhoosh = audioCtx.createGain();
+                oscWhoosh.type = 'triangle';
+                oscWhoosh.frequency.setValueAtTime(180, now);
+                oscWhoosh.frequency.linearRampToValueAtTime(45, now + 0.25);
+                oscWhoosh.connect(gainWhoosh);
+                gainWhoosh.connect(audioCtx.destination);
+                gainWhoosh.gain.setValueAtTime(0.24, now);
+                gainWhoosh.gain.exponentialRampToValueAtTime(0.005, now + 0.25);
+                oscWhoosh.start(now);
+                oscWhoosh.stop(now + 0.25);
             }
         }
 
@@ -2352,9 +2604,19 @@
         }
 
         // Fonction utilitaire pour tenter de faire apparaître un bonus parmi tous ceux disponibles
-        function trySpawnRandomPowerUp(x, y, chance = 0.2) {
-            if (Math.random() < chance) {
-                const types = ['double', 'shield', 'hyperfire', 'missile'];
+        function trySpawnRandomPowerUp(x, y, baseChance = 0.2) {
+            let actualChance = baseChance;
+            // À partir du niveau 50, les chances augmentent à chaque niveau avec un maximum de 60% (0.60)
+            if (typeof wave !== 'undefined' && wave >= 50) {
+                // Progression linéaire de la vague 50 à 100 : +0.8% par vague jusqu'au cap de 60%
+                const waveBonus = Math.min(0.40, (wave - 50) * 0.008);
+                actualChance = Math.min(0.60, baseChance + waveBonus);
+            }
+            if (Math.random() < actualChance) {
+                // Au niveau 100 (Boss Final), pas de bonus missile mini soleil
+                const types = (typeof wave !== 'undefined' && wave === 100)
+                    ? ['double', 'shield', 'hyperfire']
+                    : ['double', 'shield', 'hyperfire', 'missile'];
                 const selectedType = types[Math.floor(Math.random() * types.length)];
                 powerups.push(new PowerUp(x - 18, y - 18, selectedType));
             }
@@ -3026,6 +3288,784 @@
                     this.bombInterval = baseInterval + Math.random() * 400;
                 }
             }
+        }
+
+        // =======================================================
+        // CLASSE DU BOSS FINAL (NIVEAU 80) : STEALTH NOVA WING
+        // =======================================================
+        class FinalSwarmShip {
+            constructor(startX, startY, sideAngle) {
+                this.x = startX;
+                this.y = startY;
+                this.width = 22;
+                this.height = 18;
+                this.active = true;
+                this.color = '#ff003c'; // Rouge d'attaque
+                this.flashTimer = 0;
+                this.hp = 1;
+
+                // État de trajectoire : 'EJECT' (écart latéral), 'DIVING' (piqué en ligne droite vers la position fixée du joueur), 'LOOPING' (remontée en boucle)
+                this.state = 'EJECT';
+                this.spawnTime = Date.now();
+                this.ejectDuration = 650; // ms d'expulsion latérale
+                
+                // Vitesse et angle initiaux d'expulsion (vitesse douce)
+                const speedEject = 1.7 + Math.random() * 0.8;
+                this.vx = Math.cos(sideAngle) * speedEject;
+                this.vy = Math.sin(sideAngle) * speedEject - 0.2;
+
+                // Vitesse de piqué augmentée pour une descente plus rapide et percutante
+                this.diveSpeed = 2.75 + (gameMode === 'novice' ? -0.4 : (gameMode === 'apprenti' ? -0.2 : (isBlastMode ? 0.7 : 0)));
+                this.angle = 0;
+                this.fixedVx = 0;
+                this.fixedVy = 0;
+                this.loopProgress = 0;
+                this.loopCenterX = 0;
+                this.loopCenterY = 0;
+                this.loopRadius = 65;
+                this.loopDir = 1;
+            }
+
+            lockPlayerTarget() {
+                // Verrouiller la position du joueur au moment du déclenchement
+                const targetX = player ? (player.x + player.width / 2) : canvas.width / 2;
+                const targetY = player ? (player.y + player.height / 2) : canvas.height - 80;
+
+                const dx = targetX - (this.x + this.width / 2);
+                const dy = targetY - (this.y + this.height / 2);
+                const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+
+                this.fixedVx = (dx / dist) * this.diveSpeed;
+                this.fixedVy = (dy / dist) * this.diveSpeed;
+                this.angle = Math.atan2(this.fixedVy, this.fixedVx) - Math.PI / 2;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+                ctx.rotate(this.angle);
+
+                // Petit vaisseau rouge pointu rétro
+                ctx.beginPath();
+                ctx.moveTo(0, 10);          // Museau orienté vers la trajectoire
+                ctx.lineTo(-9, -8);
+                ctx.lineTo(0, -3);
+                ctx.lineTo(9, -8);
+                ctx.closePath();
+
+                if (this.flashTimer > 0) {
+                    ctx.fillStyle = '#ffffff';
+                } else {
+                    ctx.fillStyle = this.color;
+                }
+
+                ctx.shadowColor = '#ff003c';
+                ctx.shadowBlur = 10;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 1.2;
+                ctx.stroke();
+
+                ctx.restore();
+            }
+
+            update() {
+                if (this.flashTimer > 0) this.flashTimer -= 16.7;
+                const now = Date.now();
+
+                if (this.state === 'EJECT') {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.angle = Math.atan2(this.vy, this.vx) - Math.PI / 2;
+                    if (now - this.spawnTime >= this.ejectDuration) {
+                        this.state = 'DIVING';
+                        this.lockPlayerTarget(); // Fixe la position du joueur à cet instant précis
+                    }
+                } else if (this.state === 'DIVING') {
+                    // Piqué en ligne droite selon le vecteur fixe (non autoguidé)
+                    this.x += this.fixedVx;
+                    this.y += this.fixedVy;
+
+                    // Si le vaisseau arrive au niveau du bas / joueur sans l'avoir touché -> Enclenche une remontée (LOOPING)
+                    if (this.y > canvas.height - 35 || (player && this.y > player.y + 15)) {
+                        this.state = 'LOOPING';
+                        this.loopProgress = 0;
+                        this.loopDir = this.x < canvas.width / 2 ? 1 : -1;
+                        this.loopCenterX = this.x + (this.loopDir * this.loopRadius);
+                        this.loopCenterY = this.y - this.loopRadius;
+                    }
+                } else if (this.state === 'LOOPING') {
+                    // Remontée en boucle très progressive et ralentie jusqu'au niveau des boules du Boss Final
+                    this.loopProgress += 0.0075;
+                    const currentAngle = (this.loopDir > 0) ? (Math.PI + this.loopProgress * Math.PI) : (0 - this.loopProgress * Math.PI);
+                    this.x = this.loopCenterX + Math.cos(currentAngle) * this.loopRadius;
+                    
+                    // Calcul de la hauteur cible au niveau des boules du Boss Final (targetY 105 + botY 45 + height/2 ≈ 170)
+                    const orbLevelY = bossFinal ? (bossFinal.y + bossFinal.height / 2 + bossFinal.botY) : 170;
+                    const riseHeight = (this.loopCenterY - orbLevelY);
+                    this.y = this.loopCenterY - Math.sin(this.loopProgress * Math.PI) * riseHeight;
+                    this.angle = currentAngle + (this.loopDir > 0 ? Math.PI / 2 : -Math.PI / 2);
+
+                    // Quand la boucle de remontée atteint le sommet au niveau des boules, il replonge
+                    if (this.loopProgress >= 1.0 || this.y <= orbLevelY + 10) {
+                        this.state = 'DIVING';
+                        this.lockPlayerTarget(); // Re-verrouille la position actuelle du joueur pour la nouvelle descente
+                    }
+                }
+
+                // Limiter aux bords latéraux
+                if (this.x < 10) this.x = 10;
+                if (this.x > canvas.width - this.width - 10) this.x = canvas.width - this.width - 10;
+            }
+        }
+
+        class BossFinalShip {
+            constructor() {
+                this.width = 380;
+                this.height = 240;
+                this.baseX = canvas.width / 2 - this.width / 2;
+                this.x = this.baseX;
+                this.y = -350; // Arrive rapidement depuis le haut de l'écran
+                this.targetY = 105; // Position finale arrêtée plus haut au-dessus du centre
+                this.baseY = this.targetY;
+                this.speedY = 8.5; // Arrivée très rapide
+                this.isArrived = false;
+                this.hoverTime = 0;
+
+                // État de combat
+                this.round = 1; // 2 manches à remporter
+                this.maxRounds = 2;
+                this.phase = 'INTERACTIVE'; // 'ENTERING', 'INTERACTIVE', 'PULSING', 'CORRECT', 'DEPLOYING_RESERVE', 'WRONG_SPAWN', 'DEFEATED'
+                
+                // Formule de calcul
+                this.numA = 6;
+                this.numB = 9;
+                this.targetResult = 54;
+                this.generateRoundEquation();
+
+                // Valeurs des 2 boules du bas : null = '?'
+                this.valLeft = null;
+                this.valRight = null;
+
+                // Timers
+                this.lastShotTime = 0;
+                this.pulseStartTime = 0;
+                this.validationStartTime = 0;
+                this.wrongSpawnStartTime = 0;
+                this.spawnedCount = 0;
+                this.lastSpawnTime = 0;
+
+                // Déploiement de réserve (animation 0 à 1)
+                this.deployProgress = 0;
+
+                // Positions relatives des composants (calibrées sur l'origine du centre du vaisseau)
+                this.topSpreadX = 115;
+                this.topY = -45;
+                this.botSpreadX = 85;
+                this.botY = 45;
+                this.orbRadius = 34;
+
+                this.mulY = 48;
+                this.eqY = -1;
+                this.targetBlueY = -68;
+                this.targetBlueRadius = 42;
+
+                this.flashTimer = 0;
+
+                // Audio Boss Final
+                this.arrivalOsc = null;
+                this.arrivalGain = null;
+                this.humOsc = null;
+                this.humOsc2 = null;
+                this.humGain = null;
+                this.lfoOsc = null;
+                this.lfoGain = null;
+                this.startArrivalSound();
+            }
+
+            // 1. Son d'approche rapide depuis le haut (descente hypersonique très grave et lourde)
+            startArrivalSound() {
+                try {
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                    const now = audioCtx.currentTime;
+
+                    this.arrivalOsc = audioCtx.createOscillator();
+                    this.arrivalGain = audioCtx.createGain();
+
+                    this.arrivalOsc.type = 'sawtooth';
+                    this.arrivalOsc.frequency.setValueAtTime(220, now);
+                    this.arrivalOsc.frequency.exponentialRampToValueAtTime(45, now + 1.2);
+
+                    const filter = audioCtx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(320, now);
+                    filter.frequency.exponentialRampToValueAtTime(90, now + 1.2);
+                    filter.Q.setValueAtTime(3.5, now);
+
+                    this.arrivalGain.gain.setValueAtTime(0.001, now);
+                    this.arrivalGain.gain.linearRampToValueAtTime(0.45, now + 0.2);
+                    this.arrivalGain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+
+                    this.arrivalOsc.connect(filter);
+                    filter.connect(this.arrivalGain);
+                    this.arrivalGain.connect(audioCtx.destination);
+
+                    // Sous-harmonique très grave pour asseoir la masse du vaisseau
+                    const oscSub = audioCtx.createOscillator();
+                    const gainSub = audioCtx.createGain();
+                    oscSub.type = 'triangle';
+                    oscSub.frequency.setValueAtTime(110, now);
+                    oscSub.frequency.exponentialRampToValueAtTime(30, now + 1.2);
+                    gainSub.gain.setValueAtTime(0.001, now);
+                    gainSub.gain.linearRampToValueAtTime(0.4, now + 0.2);
+                    gainSub.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+                    oscSub.connect(gainSub);
+                    gainSub.connect(audioCtx.destination);
+
+                    this.arrivalOsc.start(now);
+                    this.arrivalOsc.stop(now + 1.25);
+                    oscSub.start(now);
+                    oscSub.stop(now + 1.25);
+                } catch (e) {
+                    console.warn("Audio BossFinal Arrival non initialisé:", e);
+                }
+            }
+
+            stopArrivalSound() {
+                try {
+                    if (this.arrivalOsc) {
+                        this.arrivalOsc.stop();
+                        this.arrivalOsc.disconnect();
+                        this.arrivalOsc = null;
+                    }
+                    this.arrivalGain = null;
+                } catch (e) {}
+            }
+
+            // 2. Grondement lourd permanent une fois à l'arrêt (identique au boss standard mais amplifié et plus lourd)
+            startHumSound() {
+                try {
+                    if (this.humGain) return; // Déjà actif
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                    const now = audioCtx.currentTime;
+
+                    // 1. Oscillateur principal très grave (dent de scie 42Hz)
+                    this.humOsc = audioCtx.createOscillator();
+                    this.humOsc.type = 'sawtooth';
+                    this.humOsc.frequency.setValueAtTime(42, now);
+
+                    // 2. Second oscillateur sous-harmonique (carré 28Hz) pour un grondement ultra massif
+                    this.humOsc2 = audioCtx.createOscillator();
+                    this.humOsc2.type = 'square';
+                    this.humOsc2.frequency.setValueAtTime(28, now);
+
+                    // 3. Filtre passe-bas avec résonance renforcée
+                    const filter = audioCtx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(160, now);
+                    filter.Q.setValueAtTime(4.5, now);
+
+                    // 4. LFO (Oscillateur basse fréquence 3.8Hz) pour l'effet de réacteur pulsé
+                    this.lfoOsc = audioCtx.createOscillator();
+                    this.lfoOsc.type = 'sine';
+                    this.lfoOsc.frequency.setValueAtTime(3.8, now);
+
+                    this.lfoGain = audioCtx.createGain();
+                    this.lfoGain.gain.setValueAtTime(40, now); // Modulation de coupure accrue
+
+                    this.lfoOsc.connect(this.lfoGain);
+                    this.lfoGain.connect(filter.frequency);
+
+                    // 5. Gain amplifié (0.55 au lieu de 0.38 pour un son bien plus puissant et présent)
+                    this.humGain = audioCtx.createGain();
+                    this.humGain.gain.setValueAtTime(0.001, now);
+                    this.humGain.gain.exponentialRampToValueAtTime(0.55, now + 0.5);
+
+                    this.humOsc.connect(filter);
+                    this.humOsc2.connect(filter);
+                    filter.connect(this.humGain);
+                    this.humGain.connect(audioCtx.destination);
+
+                    this.humOsc.start(now);
+                    this.humOsc2.start(now);
+                    this.lfoOsc.start(now);
+                } catch (e) {
+                    console.warn("Audio BossFinal Hum non initialisé:", e);
+                }
+            }
+
+            stopHumSound() {
+                try {
+                    if (this.humGain) {
+                        const now = audioCtx.currentTime;
+                        this.humGain.gain.setValueAtTime(this.humGain.gain.value, now);
+                        this.humGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+                        setTimeout(() => {
+                            if (this.humOsc) { this.humOsc.stop(); this.humOsc.disconnect(); this.humOsc = null; }
+                            if (this.humOsc2) { this.humOsc2.stop(); this.humOsc2.disconnect(); this.humOsc2 = null; }
+                            if (this.lfoOsc) { this.lfoOsc.stop(); this.lfoOsc.disconnect(); this.lfoOsc = null; }
+                            this.humGain = null;
+                        }, 260);
+                    }
+                } catch (e) {}
+            }
+
+            generateRoundEquation() {
+                // Table de 2 STRICTEMENT EXCLUE pour le Boss Final (multiplicateurs de 3 à 9)
+                const allowedTables = [3, 4, 5, 6, 7, 8, 9];
+                const activeTables = Array.from(selectedTables).filter(t => t >= 3 && t <= 9);
+                const basePool = activeTables.length > 0 ? activeTables : allowedTables;
+
+                // 1. Vérifier si le joueur a commis des erreurs lors des vagues précédentes (hors table de 2)
+                const relevantMistakes = failedEquationsHistory.filter(eq => eq.a >= 3 && eq.a <= 9 && eq.b >= 3 && eq.b <= 9);
+
+                if (relevantMistakes.length > 0) {
+                    // Choisir un calcul où le joueur a déjà échoué pour lui poser un défi personnalisé
+                    const chosenMistake = relevantMistakes[Math.floor(Math.random() * relevantMistakes.length)];
+                    this.numA = chosenMistake.a;
+                    this.numB = chosenMistake.b;
+                    this.targetResult = this.numA * this.numB;
+                } else {
+                    // 2. Pas d'erreurs précédentes ou démarrage direct au niveau 100 : tirage 100% aléatoire (tables 3 à 9)
+                    this.numA = basePool[Math.floor(Math.random() * basePool.length)];
+                    this.numB = Math.floor(Math.random() * 7) + 3; // de 3 à 9
+                    this.targetResult = this.numA * this.numB;
+                }
+
+                this.valLeft = null;
+                this.valRight = null;
+            }
+
+            getOrbCenters() {
+                const centerX = this.x + this.width / 2;
+                const centerY = this.y + this.height / 2;
+                return {
+                    left: { x: centerX - this.botSpreadX, y: centerY + this.botY, r: this.orbRadius },
+                    right: { x: centerX + this.botSpreadX, y: centerY + this.botY, r: this.orbRadius }
+                };
+            }
+
+            hitLeftOrb() {
+                if (this.phase !== 'INTERACTIVE' && this.phase !== 'PULSING') return;
+                // Si une vérification était en cours, elle s'arrête immédiatement et les boules redeviennent interactives
+                this.phase = 'INTERACTIVE';
+                if (this.valLeft === null || this.valLeft < 3 || this.valLeft >= 9) {
+                    this.valLeft = 3; // Démarre à 3 (pas de 1 ni de 2)
+                } else {
+                    this.valLeft++;
+                }
+                this.lastShotTime = Date.now();
+                playAdditionalSound('boss_hit');
+            }
+
+            hitRightOrb() {
+                if (this.phase !== 'INTERACTIVE' && this.phase !== 'PULSING') return;
+                // Si une vérification était en cours, elle s'arrête immédiatement et les boules redeviennent interactives
+                this.phase = 'INTERACTIVE';
+                if (this.valRight === null || this.valRight < 3 || this.valRight >= 9) {
+                    this.valRight = 3; // Démarre à 3 (pas de 1 ni de 2)
+                } else {
+                    this.valRight++;
+                }
+                this.lastShotTime = Date.now();
+                playAdditionalSound('boss_hit');
+            }
+
+            // Test d'inclusion point dans polygone pour la coque exacte du vaisseau
+            isInsideHull(px, py) {
+                const cx = this.x + this.width / 2;
+                const cy = this.y + this.height / 2;
+                const relX = px - cx;
+                const relY = py - cy;
+
+                // Points du polygone de coque en coordonnées relatives au centre
+                const poly = [
+                    { x: 0, y: 125 },
+                    { x: 165, y: -35 },
+                    { x: 135, y: -95 },
+                    { x: 60, y: -90 },
+                    { x: 0, y: -60 },
+                    { x: -60, y: -90 },
+                    { x: -135, y: -95 },
+                    { x: -165, y: -35 }
+                ];
+
+                // Algorithme Ray-Casting (Point in Polygon)
+                let inside = false;
+                for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+                    const xi = poly[i].x, yi = poly[i].y;
+                    const xj = poly[j].x, yj = poly[j].y;
+                    const intersect = ((yi > relY) !== (yj > relY)) &&
+                        (relX < (xj - xi) * (relY - yi) / (yj - yi) + xi);
+                    if (intersect) inside = !inside;
+                }
+                return inside;
+            }
+
+            draw() {
+                const time = Date.now();
+                ctx.save();
+                ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+
+                // 1. 4 Réacteurs principaux sur les crêtes de l'aile supérieure
+                const flk = Math.sin(time * 0.03) * 6;
+                [-110, -75, 75, 110].forEach(rx => {
+                    const baseShipY = (Math.abs(rx) > 90) ? -95 : -88;
+                    // Flamme extérieure orange
+                    ctx.fillStyle = '#ff5e00';
+                    ctx.beginPath();
+                    ctx.moveTo(rx - 8, baseShipY + 5);
+                    ctx.lineTo(rx, baseShipY - 45 - flk);
+                    ctx.lineTo(rx + 8, baseShipY + 5);
+                    ctx.fill();
+
+                    // Cœur intérieur jaune
+                    ctx.fillStyle = '#ffe600';
+                    ctx.beginPath();
+                    ctx.moveTo(rx - 4, baseShipY + 5);
+                    ctx.lineTo(rx, baseShipY - 30 - flk * 0.7);
+                    ctx.lineTo(rx + 4, baseShipY + 5);
+                    ctx.fill();
+
+                    // Tuyère métallique
+                    ctx.fillStyle = '#1c1c2b';
+                    ctx.strokeStyle = '#00f0ff';
+                    ctx.lineWidth = 1.5;
+                    ctx.fillRect(rx - 7, baseShipY - 5, 14, 10);
+                    ctx.strokeRect(rx - 7, baseShipY - 5, 14, 10);
+                });
+
+                // 2. Coque Aile Delta Furtive en diamant
+                ctx.beginPath();
+                ctx.moveTo(0, 125);            // Pointe avant basse
+                ctx.lineTo(165, -35);          // Bout d'aile droite
+                ctx.lineTo(135, -95);          // Aileron haut droit
+                ctx.lineTo(60, -90);
+                ctx.lineTo(0, -60);            // Creux central supérieur
+                ctx.lineTo(-60, -90);
+                ctx.lineTo(-135, -95);         // Aileron haut gauche
+                ctx.lineTo(-165, -35);         // Bout d'aile gauche
+                ctx.closePath();
+
+                if (this.flashTimer > 0) {
+                    ctx.fillStyle = '#ffffff';
+                } else {
+                    ctx.fillStyle = '#3a0f5e';
+                }
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 4;
+                ctx.stroke();
+
+                // Nervures néon cyan
+                ctx.strokeStyle = '#00f0ff';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(-150, -40); ctx.lineTo(-40, 45); ctx.lineTo(0, 110); ctx.lineTo(40, 45); ctx.lineTo(150, -40);
+                ctx.stroke();
+
+                // 3. Orbes supérieures de réserve
+                const curTopY = this.topY + this.deployProgress * (this.botY - this.topY);
+                const curTopX = this.topSpreadX - this.deployProgress * (this.topSpreadX - this.botSpreadX);
+
+                if (this.deployProgress < 0.98 && this.round === 1) {
+                    [-curTopX, curTopX].forEach(x => {
+                        ctx.beginPath();
+                        ctx.arc(x, curTopY, this.orbRadius, 0, Math.PI * 2);
+                        ctx.fillStyle = '#55082d'; // Teinte éteinte / inactive
+                        ctx.fill();
+                        ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+                        ctx.lineWidth = 2.5;
+                        ctx.stroke();
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+                        ctx.beginPath();
+                        ctx.arc(x - 6, curTopY - 6, this.orbRadius * 0.3, 0, Math.PI * 2);
+                        ctx.fill();
+                    });
+                }
+
+                // 4. Orbes inférieures actives
+                const botAlpha = 1 - this.deployProgress;
+                if (botAlpha > 0.05) {
+                    ctx.globalAlpha = botAlpha;
+
+                    const orbStyle = this.getComputedOrbColors(time);
+
+                    [
+                        { x: -this.botSpreadX, val: this.valLeft },
+                        { x: this.botSpreadX, val: this.valRight }
+                    ].forEach(item => {
+                        ctx.beginPath();
+                        ctx.arc(item.x, this.botY, this.orbRadius + 2, 0, Math.PI * 2);
+                        ctx.fillStyle = orbStyle.bg;
+                        ctx.shadowColor = orbStyle.glow;
+                        ctx.shadowBlur = 16;
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                        ctx.strokeStyle = orbStyle.border;
+                        ctx.lineWidth = 4;
+                        ctx.stroke();
+
+                        ctx.fillStyle = '#ffffff';
+                        ctx.font = '900 32px "Orbitron", monospace';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText(item.val === null ? '?' : item.val, item.x, this.botY);
+                    });
+                    ctx.globalAlpha = 1.0;
+                }
+
+                // 5. Verrière Supérieure Bleue (Résultat Cible)
+                ctx.beginPath();
+                ctx.arc(0, this.targetBlueY, this.targetBlueRadius, 0, Math.PI * 2);
+                ctx.fillStyle = '#0088dd';
+                ctx.fill();
+                ctx.strokeStyle = '#00f0ff';
+                ctx.lineWidth = 4;
+                ctx.stroke();
+
+                // Chiffre cible à trouver (Résultat de la multiplication)
+                ctx.save();
+                ctx.fillStyle = '#ffffff';
+                ctx.shadowColor = '#000000';
+                ctx.shadowBlur = 6;
+                ctx.font = '900 36px "Orbitron", "Arial Black", sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                const displayResult = (this.targetResult !== undefined && this.targetResult !== null) ? this.targetResult : (this.numA * this.numB);
+                ctx.fillText(displayResult, 0, this.targetBlueY);
+                ctx.restore();
+
+                // Signe "="
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(-18, this.eqY - 10, 36, 7);
+                ctx.fillRect(-18, this.eqY + 4, 36, 7);
+
+                // Bulle "X" en bas
+                ctx.beginPath();
+                ctx.arc(0, this.mulY, 24, 0, Math.PI * 2);
+                ctx.fillStyle = '#3a3a4c';
+                ctx.fill();
+                ctx.strokeStyle = '#ffe600';
+                ctx.lineWidth = 3.5;
+                ctx.stroke();
+
+                ctx.save();
+                ctx.fillStyle = '#ffe600';
+                ctx.font = '900 24px "Orbitron", "Arial Black", sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('X', 0, this.mulY);
+                ctx.restore();
+
+                ctx.restore();
+            }
+
+            getComputedOrbColors(time) {
+                let bg = '#ff007f';
+                let border = '#ffffff';
+                let glow = 'rgba(255, 0, 127, 0.4)';
+
+                if (this.phase === 'INTERACTIVE') {
+                    if (this.valLeft === null || this.valRight === null) {
+                        // Pulsation douce pour les '?' : du rose néon au magenta sombre
+                        const speed = 0.003;
+                        const factor = (Math.sin(time * speed) + 1) / 2;
+                        const r = Math.round(85 + factor * (255 - 85));
+                        const g = Math.round(8 + factor * (0 - 8));
+                        const b = Math.round(45 + factor * (127 - 45));
+                        bg = `rgb(${r}, ${g}, ${b})`;
+                        border = `rgba(255, 255, 255, ${0.4 + factor * 0.6})`;
+                        glow = `rgba(255, 0, 127, ${factor * 0.6})`;
+                    }
+                } else if (this.phase === 'PULSING') {
+                    // Pulsation jaune de calcul qui commence très lentement et s'accélère fortement à la fin
+                    const elapsed = Math.max(0, Math.min(3000, time - this.pulseStartTime));
+                    const progress = elapsed / 3000; // 0.0 au début -> 1.0 à la fin
+                    
+                    // Fréquence progressive par intégrale polynomiale : démarre très doucement (~1 Hz) puis s'emballe (~9 Hz)
+                    const totalCycles = (progress * 1.5 + Math.pow(progress, 3.2) * 8.5) * Math.PI * 2;
+                    const intensity = (Math.sin(totalCycles) + 1) / 2;
+                    
+                    // Variation de couleur : du jaune doré chaud au jaune solaire éclatant
+                    const r = 255;
+                    const g = Math.round(140 + intensity * 115);
+                    const b = Math.round(intensity * 40);
+                    bg = `rgb(${r}, ${g}, ${b})`;
+                    border = intensity > 0.6 ? '#ffffff' : 'rgba(255, 255, 255, 0.7)';
+                    glow = `rgba(255, 230, 0, ${0.35 + intensity * 0.65})`;
+                } else if (this.phase === 'CORRECT' || this.phase === 'DEPLOYING_RESERVE') {
+                    bg = '#39ff14';
+                    border = '#ffffff';
+                    glow = '#39ff14';
+                } else if (this.phase === 'WRONG_SPAWN') {
+                    // Les boules sont rouge d'alerte pendant 3s lors du constat d'erreur, puis deviennent grises/inactives pendant le largage
+                    const elapsed = time - this.validationStartTime;
+                    if (elapsed < 3000) {
+                        bg = '#ff003c';
+                        border = '#ffffff';
+                        glow = '#ff003c';
+                    } else {
+                        bg = '#2a2a38';
+                        border = 'rgba(255, 255, 255, 0.35)';
+                        glow = 'transparent';
+                    }
+                } else if (this.phase === 'WRONG_WAIT') {
+                    // Boules grises inactives tant que les mini vaisseaux sont en combat
+                    bg = '#2a2a38';
+                    border = 'rgba(255, 255, 255, 0.35)';
+                    glow = 'transparent';
+                }
+                return { bg, border, glow };
+            }
+
+            update() {
+                const now = Date.now();
+                if (this.flashTimer > 0) this.flashTimer -= 16.7;
+
+                // 1. Descente initiale rapide puis décélération
+                if (!this.isArrived) {
+                    if (this.y < this.targetY) {
+                        const remainingDist = this.targetY - this.y;
+                        if (remainingDist > 80) {
+                            this.y += this.speedY;
+                        } else {
+                            this.y += Math.max(0.8, remainingDist * 0.08);
+                        }
+                        if (this.y >= this.targetY - 1) {
+                            this.y = this.targetY;
+                            this.isArrived = true;
+                            this.stopArrivalSound();
+                            this.startHumSound(); // Démarrage du grondement lourd permanent et amplifié
+                        }
+                    }
+                } else {
+                    // Léger mouvement flottant spatial et majestueux (balancement doux H et V)
+                    this.hoverTime += 0.025;
+                    this.x = this.baseX + Math.sin(this.hoverTime * 0.7) * 22; // Balancement horizontal fluide
+                    this.y = this.baseY + Math.cos(this.hoverTime * 1.1) * 7;  // Légère respiration verticale
+                }
+
+                // 2. Gestion de la détection des 2 chiffres saisis
+                if (this.phase === 'INTERACTIVE' && this.isArrived) {
+                    if (this.valLeft !== null && this.valRight !== null) {
+                        if (now - this.lastShotTime >= 3000) {
+                            // Démarrer la pulsation de calcul de 3 secondes
+                            this.phase = 'PULSING';
+                            this.pulseStartTime = now;
+                        }
+                    }
+                } else if (this.phase === 'PULSING') {
+                    if (now - this.pulseStartTime >= 3000) {
+                        // Évaluation de la formule
+                        const isCorrect = ((this.valLeft * this.valRight) === this.targetResult) || ((this.valRight * this.valLeft) === this.targetResult);
+                        if (isCorrect) {
+                            this.phase = 'CORRECT';
+                            this.validationStartTime = now;
+                            stopIntroTheme();
+                            startIntroTheme(); // Joue le jingle triomphal d'intro en cas de bonne réponse
+                        } else {
+                            this.phase = 'WRONG_SPAWN';
+                            this.validationStartTime = now;
+                            this.wrongSpawnStartTime = now;
+                            this.spawnedCount = 0;
+                            this.lastSpawnTime = 0;
+                            playSound('explosion_fail'); // Son fort et grave d'erreur
+                        }
+                    }
+                } else if (this.phase === 'CORRECT') {
+                    // Les boules restent vertes pendant 3 secondes puis explosent
+                    if (now - this.validationStartTime >= 3000) {
+                        // Particules d'explosion des 2 boules
+                        const centers = this.getOrbCenters();
+                        [centers.left, centers.right].forEach(c => {
+                            for (let p = 0; p < 25; p++) {
+                                particles.push(new Particle(c.x, c.y, '#39ff14'));
+                                particles.push(new Particle(c.x, c.y, '#ffffff'));
+                            }
+                        });
+                        playSound('orb_explosion'); // Bruitage lourd d'explosion des boules
+
+                        if (this.round === 1) {
+                            // Début du déploiement de la réserve
+                            this.phase = 'DEPLOYING_RESERVE';
+                            this.deployProgress = 0;
+                        } else {
+                            // Victoire finale totale !
+                            this.phase = 'DEFEATED';
+                            handleFinalBossDefeated();
+                        }
+                    }
+                } else if (this.phase === 'DEPLOYING_RESERVE') {
+                    // Animation fluide de glissement des 2 boules du haut vers le bas
+                    this.deployProgress += 0.025;
+                    if (this.deployProgress >= 1.0) {
+                        this.deployProgress = 0;
+                        this.round = 2;
+                        this.generateRoundEquation(); // Nouvelle équation
+                        this.phase = 'INTERACTIVE';
+                    }
+                } else if (this.phase === 'WRONG_SPAWN') {
+                    // Après 3s en rouge, largage de 10 vaisseaux (5 depuis gauche, 5 depuis droite, un à la fois)
+                    if (now - this.validationStartTime >= 3000) {
+                        if (this.spawnedCount < 10) {
+                            if (now - this.lastSpawnTime >= 450) { // Cadence espacée (450ms entre chaque vaisseau)
+                                const centers = this.getOrbCenters();
+                                const isLeft = (this.spawnedCount % 2 === 0);
+                                const spawnPos = isLeft ? centers.left : centers.right;
+                                const sideAngle = isLeft ? (-Math.PI * 0.75) : (-Math.PI * 0.25);
+
+                                swarmShips.push(new FinalSwarmShip(spawnPos.x, spawnPos.y, sideAngle));
+                                playAdditionalSound('swarm_eject'); // Bruitage d'éjection mécanique et pneumatique de vaisseau
+                                this.spawnedCount++;
+                                this.lastSpawnTime = now;
+                            }
+                        } else {
+                            // Tous les vaisseaux sont sortis, attente de leur destruction
+                            this.phase = 'WRONG_WAIT';
+                        }
+                    }
+                } else if (this.phase === 'WRONG_WAIT') {
+                    // Quand le joueur a détruit tous les petits vaisseaux
+                    if (swarmShips.length === 0) {
+                        this.valLeft = null;
+                        this.valRight = null;
+                        this.phase = 'INTERACTIVE';
+                    }
+                }
+            }
+        }
+
+        function handleFinalBossDefeated() {
+            if (!bossFinal) return;
+            const b = bossFinal;
+            for (let p = 0; p < 80; p++) {
+                particles.push(new Particle(b.x + b.width / 2, b.y + b.height / 2, '#ffe600'));
+                particles.push(new Particle(b.x + b.width / 2, b.y + b.height / 2, '#ff007f'));
+                particles.push(new Particle(b.x + b.width / 2, b.y + b.height / 2, '#00f0ff'));
+                particles.push(new Particle(b.x + b.width / 2, b.y + b.height / 2, '#ffffff'));
+            }
+            playSound('orb_explosion'); // Grosse explosion finale
+            addScore(2000, b.x + b.width / 2, b.y + b.height / 2);
+
+            // Largage de bonus (sans missile au niveau 100)
+            const bossCenterX = b.x + b.width / 2;
+            const bossCenterY = b.y + b.height / 2;
+            powerups.push(new PowerUp(bossCenterX - 40, bossCenterY, 'double'));
+            powerups.push(new PowerUp(bossCenterX, bossCenterY - 10, 'shield'));
+            powerups.push(new PowerUp(bossCenterX + 40, bossCenterY, 'hyperfire'));
+
+            b.stopHumSound();
+            b.stopArrivalSound();
+            bossFinal = null;
+            setTimeout(() => {
+                if (isGameRunning) {
+                    wave++;
+                    document.getElementById('waveValue').textContent = wave;
+                    generateMathWave();
+                }
+            }, 2500);
         }
 
         // Classe BossBomb (peut être détruite par le joueur)
@@ -4288,19 +5328,44 @@
             enemyBullets = [];
             enemies = [];
             bossBombs = []; // Vider les bombes du boss
+            swarmShips = []; // Vider les essaims du boss final
             if (boss) {
                 boss.stopHumSound();
             }
             boss = null;
-            if (wave % 10 === 0) {
+            bossFinal = null;
+
+            // Masquer ou afficher le panneau d'équation supérieur
+            const eqPanel = document.getElementById('equation-panel');
+            if (wave === 100) {
+                // BOSS FINAL AU NIVEAU 100
+                bossFinal = new BossFinalShip();
+                if (eqPanel) eqPanel.classList.add('hidden'); // Masqué pour ne pas perturber le joueur
+                lastHitOrWaveStartTime = Date.now();
+                waveTextStartTime = Date.now();
+                return; // Pas d'autres ennemis standards durant le Boss Final
+            } else {
+                if (eqPanel) {
+                    if (isBlastMode) eqPanel.classList.add('hidden');
+                    else eqPanel.classList.remove('hidden');
+                }
+            }
+
+            if (wave % 10 === 0 && wave !== 100) {
                 boss = new Boss(wave);
             }
             lastHitOrWaveStartTime = Date.now();
             waveTextStartTime = Date.now();
             
-            // Choisir une table au hasard parmi celles cochées ou aléatoire en mode Blast
-            const activeTables = Array.from(selectedTables);
-            currentMultiplierA = activeTables.length > 0 ? activeTables[Math.floor(Math.random() * activeTables.length)] : (Math.floor(Math.random() * 9) + 2);
+            // Choisir une table : Mode AUTO adaptatif intelligent ou Sélection manuelle des tables
+            if (isBlastMode) {
+                currentMultiplierA = Math.floor(Math.random() * 8) + 2; // de 2 à 9
+            } else if (isAutoModeSelected) {
+                currentMultiplierA = pickAutoAdaptiveTable(); // Tire plus souvent les tables où le joueur a des difficultés
+            } else {
+                const activeTables = Array.from(selectedTables).filter(t => t >= 2 && t <= 9);
+                currentMultiplierA = activeTables.length > 0 ? activeTables[Math.floor(Math.random() * activeTables.length)] : (Math.floor(Math.random() * 8) + 2);
+            }
             
             // Calcul de la limite maximale du second multiplicateur selon le niveau
             let maxMultiplier = 10;
@@ -4442,8 +5507,8 @@
                 }
             }
 
-            // Débris (vagues 35-64 : débris classiques ; vagues >= 65 : 3 à 8 très gros morceaux de roche)
-            if (wave >= 35) {
+            // Débris (vagues 35-64 : débris classiques ; vagues >= 65 : 3 à 8 très gros morceaux de roche ; AUCUN rocher au niveau 100)
+            if (wave >= 35 && wave !== 100) {
                 const targetCount = (wave >= 65) 
                     ? (3 + Math.floor(Math.random() * 6)) // entre 3 et 8 gros morceaux
                     : Math.min(10, 2 + Math.floor((wave - 35) / 2));
@@ -4523,6 +5588,86 @@
                                 handleEnemyDestroyed(enemy, eIndex);
                             }
                         }
+                        break;
+                    }
+                }
+            }
+
+            // Collision des tirs du joueur sur le Boss Final (Niveau 100)
+            if (bossFinal) {
+                const centers = bossFinal.getOrbCenters();
+                for (let bIndex = bullets.length - 1; bIndex >= 0; bIndex--) {
+                    const bullet = bullets[bIndex];
+                    
+                    // 1. Orbes interactives (interactivité possible même en cours de vérification pulsante)
+                    if (bossFinal.phase === 'INTERACTIVE' || bossFinal.phase === 'PULSING') {
+                        const dxL = bullet.x - centers.left.x;
+                        const dyL = bullet.y - centers.left.y;
+                        if (Math.sqrt(dxL * dxL + dyL * dyL) <= centers.left.r + 6) {
+                            bullet.active = false;
+                            bullets.splice(bIndex, 1);
+                            bossFinal.hitLeftOrb();
+                            for (let p = 0; p < 10; p++) {
+                                particles.push(new Particle(bullet.x, bullet.y, '#ffffff'));
+                                particles.push(new Particle(bullet.x, bullet.y, '#ff007f'));
+                            }
+                            break;
+                        }
+
+                        // 2. Orbe droite
+                        const dxR = bullet.x - centers.right.x;
+                        const dyR = bullet.y - centers.right.y;
+                        if (Math.sqrt(dxR * dxR + dyR * dyR) <= centers.right.r + 6) {
+                            bullet.active = false;
+                            bullets.splice(bIndex, 1);
+                            bossFinal.hitRightOrb();
+                            for (let p = 0; p < 10; p++) {
+                                particles.push(new Particle(bullet.x, bullet.y, '#ffffff'));
+                                particles.push(new Particle(bullet.x, bullet.y, '#ff007f'));
+                            }
+                            break;
+                        }
+                    }
+
+                    // 3. Impact sur la coque générale du Boss Final (calcul exact de polygone fidèle à la forme visuelle)
+                    if (bossFinal.isInsideHull(bullet.x, bullet.y)) {
+                        bullet.active = false;
+                        bullets.splice(bIndex, 1);
+                        bossFinal.flashTimer = 80;
+                        playAdditionalSound('boss_hit'); // Bruitage d'impact métallique rétro
+
+                        // Étincelles métalliques bleues/cyan et blanches
+                        for (let p = 0; p < 7; p++) {
+                            particles.push(new Particle(bullet.x, bullet.y, '#00f0ff'));
+                            particles.push(new Particle(bullet.x, bullet.y, '#ffffff'));
+                        }
+                        break;
+                    }
+                }
+            }
+
+            // Collision des tirs du joueur sur les vaisseaux de l'essaim du Boss Final
+            for (let bIndex = bullets.length - 1; bIndex >= 0; bIndex--) {
+                const bullet = bullets[bIndex];
+                for (let sIndex = swarmShips.length - 1; sIndex >= 0; sIndex--) {
+                    const ship = swarmShips[sIndex];
+                    if (bullet.x > ship.x - 2 && 
+                        bullet.x < ship.x + ship.width + 2 &&
+                        bullet.y > ship.y - 2 && 
+                        bullet.y < ship.y + ship.height + 2) {
+                        
+                        bullet.active = false;
+                        bullets.splice(bIndex, 1);
+
+                        // Destruction du petit vaisseau
+                        for (let p = 0; p < 15; p++) {
+                            particles.push(new Particle(ship.x + ship.width / 2, ship.y + ship.height / 2, '#ff003c'));
+                            particles.push(new Particle(ship.x + ship.width / 2, ship.y + ship.height / 2, '#ffe600'));
+                        }
+                        playSound('explosion_ok');
+                        addScore(50, ship.x + ship.width / 2, ship.y + ship.height / 2);
+                        trySpawnRandomPowerUp(ship.x + ship.width / 2, ship.y + ship.height / 2, 0.2);
+                        swarmShips.splice(sIndex, 1);
                         break;
                     }
                 }
@@ -4631,12 +5776,39 @@
                 }
             }
 
+            // Collision directe des vaisseaux de l'essaim du Boss Final avec le joueur
+            for (let i = swarmShips.length - 1; i >= 0; i--) {
+                const ship = swarmShips[i];
+                if (ship.x < player.x + player.width &&
+                    ship.x + ship.width > player.x &&
+                    ship.y < player.y + player.height &&
+                    ship.y + ship.height > player.y) {
+                    
+                    handlePlayerHit();
+                    for (let p = 0; p < 15; p++) {
+                        particles.push(new Particle(ship.x + ship.width / 2, ship.y + ship.height / 2, '#ff003c'));
+                    }
+                    swarmShips.splice(i, 1);
+                    break;
+                }
+            }
+
             // Collision physique du Boss avec le joueur
             if (boss && 
                 boss.x < player.x + player.width &&
                 boss.x + boss.width > player.x &&
                 boss.y < player.y + player.height &&
                 boss.y + boss.height > player.y) {
+                
+                handlePlayerHit();
+            }
+
+            // Collision physique du Boss Final avec le joueur
+            if (bossFinal && 
+                bossFinal.x < player.x + player.width &&
+                bossFinal.x + bossFinal.width > player.x &&
+                bossFinal.y < player.y + player.height &&
+                bossFinal.y + bossFinal.height > player.y) {
                 
                 handlePlayerHit();
             }
@@ -4978,6 +6150,15 @@
                 // Gagné !
                 addScore(100, enemy.x + enemy.width / 2, enemy.y + enemy.height / 2);
                 playSound('explosion_ok');
+                correctAnswersCount++;
+
+                // Enregistrer le succès dans le profil d'apprentissage adaptatif
+                recordTableSuccess(currentMultiplierA);
+
+                // Incrémenter le total de vagues jouées
+                totalWavesPlayed++;
+                saveLearningStats();
+                refreshTablesSelectionUI();
 
                 // Restaurer une vie perdue (maximum startingLives)
                 if (lives < startingLives) {
@@ -5019,6 +6200,18 @@
             } else {
                 // Mauvaise réponse : Perdu une vie, réinitialisation du combo et perte de points
                 combo = 1;
+
+                // Enregistrer l'erreur dans le profil d'apprentissage adaptatif
+                recordTableError(currentMultiplierA);
+
+                // Mémorisation de l'erreur pour cibler le Boss Final (hors table de 2)
+                if (currentMultiplierA !== 2 && currentMultiplierB !== 2) {
+                    failedEquationsHistory.push({
+                        a: currentMultiplierA,
+                        b: currentMultiplierB,
+                        result: correctAnswer
+                    });
+                }
                 
                 lives--;
                 score = Math.max(0, score - 50);
@@ -5151,6 +6344,38 @@
                 document.getElementById('restart-btn').classList.remove('hidden');
             }
             
+            // Analyse des erreurs pour conseiller les tables à réviser
+            const adviceBox = document.getElementById('revision-advice-box');
+            const adviceText = document.getElementById('revision-advice-text');
+            if (adviceBox && adviceText) {
+                if (failedEquationsHistory.length > 0) {
+                    // Comptabiliser les erreurs par table
+                    const errorCounts = {};
+                    failedEquationsHistory.forEach(eq => {
+                        const table = eq.a;
+                        errorCounts[table] = (errorCounts[table] || 0) + 1;
+                    });
+
+                    // Trier les tables de la plus problématique à la moins problématique
+                    const sortedTables = Object.keys(errorCounts)
+                        .map(t => parseInt(t))
+                        .sort((a, b) => errorCounts[b] - errorCounts[a]);
+
+                    const formattedTables = sortedTables.map(t => `<strong>Table de ${t}</strong>`).join(', ');
+                    adviceBox.style.display = 'block';
+                    adviceBox.style.borderColor = 'var(--neon-pink)';
+                    adviceBox.style.background = 'rgba(255, 0, 127, 0.12)';
+                    adviceText.innerHTML = `💡 <span style="color: var(--neon-yellow); font-weight: bold;">Conseil d'entraînement :</span> Tu as rencontré des difficultés sur la ${formattedTables}. Prends le temps de la réviser pour battre ton record !`;
+                } else if (correctAnswersCount > 0) {
+                    adviceBox.style.display = 'block';
+                    adviceBox.style.borderColor = 'var(--neon-green, #39ff14)';
+                    adviceBox.style.background = 'rgba(57, 255, 20, 0.1)';
+                    adviceText.innerHTML = `⭐ <span style="color: #39ff14; font-weight: bold;">Parcours Parfait :</span> Aucune erreur de calcul détectée ! Tes tables de multiplication sont parfaitement maîtrisées !`;
+                } else {
+                    adviceBox.style.display = 'none';
+                }
+            }
+
             document.getElementById('gameover-overlay').classList.remove('hidden');
             updateAndroidMissileBtn();
         }
@@ -5387,9 +6612,21 @@
             const playBtn = document.getElementById('play-custom-settings-btn');
             if (playBtn) {
                 if (startingWaveConfig > 1) {
-                    playBtn.style.display = 'inline-block';
+                    playBtn.disabled = false;
+                    playBtn.style.opacity = '1';
+                    playBtn.style.cursor = 'pointer';
+                    playBtn.style.pointerEvents = 'auto';
+                    playBtn.style.borderColor = 'var(--neon-blue)';
+                    playBtn.style.color = 'var(--neon-blue)';
+                    playBtn.style.boxShadow = '0 0 15px rgba(0, 240, 255, 0.4)';
                 } else {
-                    playBtn.style.display = 'none';
+                    playBtn.disabled = true;
+                    playBtn.style.opacity = '0.35';
+                    playBtn.style.cursor = 'not-allowed';
+                    playBtn.style.pointerEvents = 'none';
+                    playBtn.style.borderColor = '#666';
+                    playBtn.style.color = '#888';
+                    playBtn.style.boxShadow = 'none';
                 }
             }
         }
@@ -5444,16 +6681,24 @@
 
         decStartWaveBtn.addEventListener('click', () => {
             if (startingWaveConfig > 1) {
-                startingWaveConfig--;
+                if (startingWaveConfig <= 5) {
+                    startingWaveConfig = 1;
+                } else {
+                    startingWaveConfig = Math.max(1, startingWaveConfig - 5);
+                }
                 settingsStartWaveVal.textContent = startingWaveConfig;
-                isCustomWaveConfigured = true;
+                isCustomWaveConfigured = (startingWaveConfig > 1);
                 updatePlayCustomBtnVisibility();
             }
         });
 
         incStartWaveBtn.addEventListener('click', () => {
-            if (startingWaveConfig < 65) {
-                startingWaveConfig++;
+            if (startingWaveConfig < 100) {
+                if (startingWaveConfig === 1) {
+                    startingWaveConfig = 5;
+                } else {
+                    startingWaveConfig = Math.min(100, startingWaveConfig + 5);
+                }
                 settingsStartWaveVal.textContent = startingWaveConfig;
                 isCustomWaveConfigured = true;
                 updatePlayCustomBtnVisibility();
@@ -5494,6 +6739,25 @@
                 settingsOverlay.classList.add('hidden');
             }
         });
+
+        const resetLearningBtn = document.getElementById('reset-learning-btn');
+        if (resetLearningBtn) {
+            resetLearningBtn.addEventListener('click', () => {
+                if (confirm("Voulez-vous réinitialiser vos statistiques d'apprentissage et le déblocage du mode AUTO ?")) {
+                    totalWavesPlayed = 0;
+                    isAutoModeUnlocked = false;
+                    isAutoModeSelected = false;
+                    tableLearningStats = {};
+                    for (let t = 2; t <= 9; t++) {
+                        tableLearningStats[t] = { errors: 0, successes: 0 };
+                    }
+                    saveLearningStats();
+                    refreshTablesSelectionUI();
+                    alert("Statistiques d'apprentissage et profil AUTO réinitialisés !");
+                    settingsOverlay.classList.add('hidden');
+                }
+            });
+        }
 
         // --- BOUCLE DE JEU PRINCIPALE ---
         function gameLoop() {
@@ -5632,8 +6896,8 @@
                     });
                 }
 
-                // Gestion et mise à jour des débris de roche (à partir de la vague 35)
-                if (wave >= 35) {
+                // Gestion et mise à jour des débris de roche (à partir de la vague 35, sauf vague 100 du Boss Final)
+                if (wave >= 35 && wave !== 100) {
                     // Enlever les débris inactifs
                     for (let i = debrisList.length - 1; i >= 0; i--) {
                         if (!debrisList[i].active) {
@@ -5669,6 +6933,23 @@
                     if (boss.x > canvas.width + 120) {
                         boss.stopHumSound();
                         boss = null; // Il est sorti de l'écran sans être détruit
+                    }
+                }
+
+                // Mise à jour du Boss Final (Niveau 80)
+                if (bossFinal) {
+                    if (timeScale >= 0.95 || Math.random() < timeScale) {
+                        bossFinal.update();
+                    }
+                }
+
+                // Mise à jour des vaisseaux de l'essaim du Boss Final
+                for (let i = swarmShips.length - 1; i >= 0; i--) {
+                    if (timeScale >= 0.95 || Math.random() < timeScale) {
+                        swarmShips[i].update();
+                    }
+                    if (!swarmShips[i].active) {
+                        swarmShips.splice(i, 1);
                     }
                 }
 
@@ -5737,6 +7018,10 @@
             // Dessin du Boss et de ses bombes
             if (boss) boss.draw();
             bossBombs.forEach(bomb => bomb.draw());
+
+            // Dessin du Boss Final et de son essaim
+            if (bossFinal) bossFinal.draw();
+            swarmShips.forEach(ship => ship.draw());
 
             // Dessin des bonus virevoltants
             virevoltants.forEach(bonus => bonus.draw());
@@ -5831,6 +7116,9 @@
             enemies = [];
             smallShips = [];
             debrisList = [];
+            bossFinal = null;
+            swarmShips = [];
+            failedEquationsHistory = [];
             particles = [];
             powerups = [];
             virevoltants = [];
@@ -6023,6 +7311,8 @@
             // 2. Arrêter la partie et la musique si en cours
             isGameRunning = false;
             stopMusic();
+            if (boss) { boss.stopHumSound(); }
+            if (bossFinal) { bossFinal.stopHumSound(); bossFinal.stopArrivalSound(); }
 
             // 3. Masquer les overlays de jeu et réinitialiser vers la page d'intro
             document.getElementById('quit-btn').classList.add('hidden');
@@ -6051,6 +7341,8 @@
         function returnToSummary() {
             isGameRunning = false;
             stopMusic();
+            if (boss) { boss.stopHumSound(); }
+            if (bossFinal) { bossFinal.stopHumSound(); bossFinal.stopArrivalSound(); }
 
             document.getElementById('quit-game-choice-overlay').classList.add('hidden');
             document.getElementById('equation-panel').classList.add('hidden');
