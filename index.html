@@ -474,13 +474,14 @@
             box-shadow: 0 0 15px var(--neon-blue);
         }
 
-        /* Quand le mode AUTO est activé : toutes les tables ×2 à ×9 apparaissent sélectionnées mais estompées (couleur adoucie) et non cliquables */
+        /* Quand le mode AUTO est activé : toutes les tables ×2 à ×9 apparaissent désactivées/grisées et non cliquables */
         .table-chip.auto-dimmed {
-            background: rgba(0, 180, 230, 0.42) !important;
-            color: rgba(255, 255, 255, 0.85) !important;
-            border-color: rgba(0, 240, 255, 0.5) !important;
-            box-shadow: 0 0 8px rgba(0, 240, 255, 0.25) !important;
-            cursor: default !important;
+            background: rgba(255, 255, 255, 0.03) !important;
+            color: #666 !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            box-shadow: none !important;
+            opacity: 0.35 !important;
+            cursor: not-allowed !important;
             pointer-events: none !important;
             transform: none !important;
         }
@@ -1640,7 +1641,7 @@
             </div>
 
             <button class="menu-btn btn-intro-play" id="intro-play-btn">JOUER</button>
-            <div class="intro-credits">Christophe DELATTRE - 2026 v3.0</div>
+            <div class="intro-credits">Christophe DELATTRE - 2026 v3.1</div>
         </div>
 
         <!-- Menu Principal (Sommaire) -->
@@ -2060,6 +2061,13 @@
             const rawProfiles = localStorage.getItem('math_galaga_profiles');
             if (rawProfiles) {
                 profiles = JSON.parse(rawProfiles);
+                if (Array.isArray(profiles)) {
+                    profiles.forEach(p => {
+                        if (p.isAutoModeSelected === undefined || p.isAutoModeSelected === false) {
+                            p.isAutoModeSelected = true;
+                        }
+                    });
+                }
             }
         } catch (e) {}
 
@@ -2070,7 +2078,7 @@
             const oldLearningStats = JSON.parse(localStorage.getItem('math_galaga_table_learning_stats')) || null;
             const oldWaves = parseInt(localStorage.getItem('math_galaga_total_waves_played')) || 0;
             const oldBlastUnlocked = localStorage.getItem('math_galaga_blast_unlocked') === 'true';
-            const oldAutoSelected = localStorage.getItem('math_galaga_auto_mode_selected') === 'true';
+            const oldAutoSelected = true;
             const oldTables = JSON.parse(localStorage.getItem('math_galaga_selected_tables')) || [3, 4, 5, 6, 7, 8, 9];
 
             const initialProf = JSON.parse(JSON.stringify(DEFAULT_PROFILES_DATA[0]));
@@ -2310,6 +2318,7 @@
             try {
                 localStorage.setItem('math_galaga_selected_tables', JSON.stringify(Array.from(selectedTables)));
                 localStorage.setItem('math_galaga_auto_mode_selected', isAutoModeSelected ? 'true' : 'false');
+                saveAllProfiles();
             } catch (e) {}
         }
 
@@ -11195,7 +11204,7 @@
                 ],
                 blastBestScore: { name: name, score: 0, wave: 0 },
                 isBlastUnlocked: false,
-                isAutoModeSelected: false,
+                isAutoModeSelected: true,
                 selectedTables: [3, 4, 5, 6, 7, 8, 9]
             };
 
