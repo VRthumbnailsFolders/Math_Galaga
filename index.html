@@ -318,9 +318,15 @@
             transform: scale(1.05);
         }
 
+        .btn-mode-progress {
+            position: relative;
+            overflow: visible !important;
+            text-shadow: 0 0 6px rgba(0, 0, 0, 0.9), 0 1px 2px #000;
+        }
+
         .btn-novice {
             border-color: var(--neon-green) !important;
-            color: var(--neon-green) !important;
+            color: var(--neon-green);
             box-shadow: 0 0 10px rgba(57, 255, 20, 0.2) !important;
         }
         .btn-novice:hover {
@@ -330,7 +336,7 @@
         }
         .btn-apprenti {
             border-color: var(--neon-yellow) !important;
-            color: var(--neon-yellow) !important;
+            color: var(--neon-yellow);
             box-shadow: 0 0 10px rgba(255, 230, 0, 0.2) !important;
         }
         .btn-apprenti:hover {
@@ -340,7 +346,7 @@
         }
         .btn-expert {
             border-color: var(--neon-pink) !important;
-            color: var(--neon-pink) !important;
+            color: var(--neon-pink);
             box-shadow: 0 0 10px rgba(255, 0, 127, 0.2) !important;
         }
         .btn-expert:hover {
@@ -350,7 +356,7 @@
         }
         .btn-god {
             border-color: #ff003c !important;
-            color: #ff003c !important;
+            color: #ff003c;
             box-shadow: 0 0 10px rgba(255, 0, 60, 0.2) !important;
         }
         .btn-god:hover {
@@ -360,7 +366,7 @@
         }
         .btn-blast {
             border-color: #ff5e00 !important;
-            color: #ffae00 !important;
+            color: #ffae00;
             box-shadow: 0 0 10px rgba(255, 94, 0, 0.2) !important;
             animation: pulse-blast 1.5s infinite alternate;
         }
@@ -564,12 +570,22 @@
             width: 320px;
             max-width: 350px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 1), 0 0 10px rgba(255, 230, 0, 0.4);
-            z-index: 500;
+            z-index: 9999;
             pointer-events: none;
             letter-spacing: 0.3px;
             text-align: left;
             text-transform: none;
             text-shadow: none;
+        }
+
+        /* Pour le bouton BLAST en bas de la colonne MODES DE JEU */
+        #start-blast-btn[data-tooltip]:hover::after {
+            bottom: calc(100% + 14px) !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            z-index: 99999 !important;
+            display: block !important;
+            visibility: visible !important;
         }
 
         /* Variante d'infobulle compacte pour les petits boutons (+ / -) */
@@ -591,12 +607,39 @@
             white-space: normal;
             width: 220px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 1), 0 0 10px rgba(255, 230, 0, 0.4);
-            z-index: 500;
+            z-index: 9999;
             pointer-events: none;
             letter-spacing: 0.3px;
             text-align: center;
             text-transform: none;
             text-shadow: none;
+        }
+
+        /* Séparation graphique entre les modes exercices et le mode Blast */
+        .menu-modes-divider {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin: 2px 0;
+            gap: 10px;
+        }
+
+        .menu-modes-divider::before,
+        .menu-modes-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 94, 0, 0.6), transparent);
+            box-shadow: 0 0 6px rgba(255, 94, 0, 0.4);
+        }
+
+        .menu-modes-divider-text {
+            font-size: 0.72rem;
+            color: #ffae00;
+            letter-spacing: 2px;
+            text-shadow: 0 0 6px rgba(255, 174, 0, 0.6);
+            white-space: nowrap;
+            font-weight: bold;
         }
 
         /* Menu de configuration et scores disposés en colonnes */
@@ -1641,7 +1684,7 @@
             </div>
 
             <button class="menu-btn btn-intro-play" id="intro-play-btn">JOUER</button>
-            <div class="intro-credits">Christophe DELATTRE - 2026 v3.1</div>
+            <div class="intro-credits">Christophe DELATTRE - 2026 v3.2</div>
         </div>
 
         <!-- Menu Principal (Sommaire) -->
@@ -1665,7 +1708,9 @@
                         <button class="menu-btn btn-apprenti" id="start-apprenti-btn" style="margin-top: 0; font-size: 1.15rem; padding: 12px 20px;">Apprenti</button>
                         <button class="menu-btn btn-expert" id="start-expert-btn" style="margin-top: 0; font-size: 1.15rem; padding: 12px 20px;">Expert</button>
                         <button class="menu-btn btn-god" id="start-god-btn" style="margin-top: 0; font-size: 1.15rem; padding: 12px 20px;">God</button>
-                        <button class="menu-btn" id="start-custom-btn" style="margin-top: 0; font-size: 1.15rem; padding: 12px 20px; border-color: var(--neon-blue); color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 240, 255, 0.25);">Niveau personnalisé</button>
+                        <div class="menu-modes-divider">
+                            <span class="menu-modes-divider-text">MODE DÉFI ARCADE</span>
+                        </div>
                         <button class="menu-btn btn-blast" id="start-blast-btn" style="margin-top: 0; font-size: 1.15rem; padding: 12px 20px; font-weight: bold;">BLAST !!!</button>
                     </div>
                 </div>
@@ -2008,8 +2053,8 @@
         // Progression de vague par défaut selon le mode de jeu
         const DEFAULT_MODE_START_WAVES = {
             novice: 1,
-            apprenti: 10,
-            expert: 25,
+            apprenti: 1,
+            expert: 1,
             god: 1
         };
 
@@ -2023,8 +2068,8 @@
                 personalBestScore: 0,
                 savedWaves: {
                     novice: 1,
-                    apprenti: 10,
-                    expert: 25,
+                    apprenti: 1,
+                    expert: 1,
                     god: 1
                 },
                 tableLearningStats: {
@@ -2087,7 +2132,7 @@
             if (oldLearningStats) initialProf.tableLearningStats = oldLearningStats;
             initialProf.totalWavesPlayed = oldWaves;
             initialProf.maxWaveReached = 1;
-            initialProf.savedWaves = { novice: 1, apprenti: 10, expert: 25, god: 1 };
+            initialProf.savedWaves = { novice: 1, apprenti: 1, expert: 1, god: 1 };
             initialProf.isBlastUnlocked = oldBlastUnlocked;
             initialProf.isAutoModeSelected = oldAutoSelected;
             initialProf.selectedTables = oldTables;
@@ -2112,11 +2157,11 @@
 
         profiles.forEach(p => {
             if (!p.savedWaves) {
-                p.savedWaves = { novice: 1, apprenti: 10, expert: 25, god: 1 };
+                p.savedWaves = { novice: 1, apprenti: 1, expert: 1, god: 1 };
             } else {
                 if (typeof p.savedWaves.novice !== 'number') p.savedWaves.novice = 1;
-                if (typeof p.savedWaves.apprenti !== 'number') p.savedWaves.apprenti = 10;
-                if (typeof p.savedWaves.expert !== 'number') p.savedWaves.expert = 25;
+                if (typeof p.savedWaves.apprenti !== 'number') p.savedWaves.apprenti = 1;
+                if (typeof p.savedWaves.expert !== 'number') p.savedWaves.expert = 1;
                 if (typeof p.savedWaves.god !== 'number') p.savedWaves.god = 1;
             }
             if (!Array.isArray(p.highScores)) p.highScores = [];
@@ -2141,7 +2186,7 @@
         let totalWavesPlayed = currentProfile.totalWavesPlayed || 0;
         let maxWaveReached = currentProfile.maxWaveReached || 1;
         let personalBestScore = currentProfile.personalBestScore || 0;
-        let savedWaves = currentProfile.savedWaves ? { ...currentProfile.savedWaves } : { novice: 1, apprenti: 10, expert: 25, god: 1 };
+        let savedWaves = currentProfile.savedWaves ? { ...currentProfile.savedWaves } : { novice: 1, apprenti: 1, expert: 1, god: 1 };
         let isAutoModeSelected = (currentProfile.isAutoModeSelected !== undefined) ? !!currentProfile.isAutoModeSelected : true;
         let tableLearningStats = currentProfile.tableLearningStats || {};
         for (let t = 2; t <= 9; t++) {
@@ -2204,10 +2249,10 @@
             totalWavesPlayed = currentProfile.totalWavesPlayed || 0;
             maxWaveReached = currentProfile.maxWaveReached || 1;
             personalBestScore = currentProfile.personalBestScore || 0;
-            savedWaves = currentProfile.savedWaves ? { ...currentProfile.savedWaves } : { novice: 1, apprenti: 10, expert: 25, god: 1 };
+            savedWaves = currentProfile.savedWaves ? { ...currentProfile.savedWaves } : { novice: 1, apprenti: 1, expert: 1, god: 1 };
             if (typeof savedWaves.novice !== 'number') savedWaves.novice = 1;
-            if (typeof savedWaves.apprenti !== 'number') savedWaves.apprenti = 10;
-            if (typeof savedWaves.expert !== 'number') savedWaves.expert = 25;
+            if (typeof savedWaves.apprenti !== 'number') savedWaves.apprenti = 1;
+            if (typeof savedWaves.expert !== 'number') savedWaves.expert = 1;
             if (typeof savedWaves.god !== 'number') savedWaves.god = 1;
 
             isAutoModeSelected = (currentProfile.isAutoModeSelected !== undefined) ? !!currentProfile.isAutoModeSelected : true;
@@ -2251,7 +2296,7 @@
         // Sauvegarde de la progression de vague par mode (Novice, Apprenti, Expert, God)
         function updateModeWaveProgression(currentWave) {
             if (gameMode === 'custom' || isBlastMode) return; // Modes exclus
-            if (!savedWaves) savedWaves = { novice: 1, apprenti: 10, expert: 25, god: 1 };
+            if (!savedWaves) savedWaves = { novice: 1, apprenti: 1, expert: 1, god: 1 };
 
             if (gameMode === 'novice' && currentWave > savedWaves.novice) {
                 savedWaves.novice = currentWave;
@@ -2417,6 +2462,7 @@
         let bullets = [];
         let enemies = [];
         let smallShips = [];
+        let blueSwarmShips = [];
         let debrisList = [];
         let startingMissiles = 1;
         let startingWaveConfig = 1;
@@ -2427,13 +2473,13 @@
         // Fonctions de plafond selon le mode de jeu
         function getMaxLivesAllowed() {
             if (gameMode === 'god') return 3;
-            if (gameMode === 'expert') return 4;
+            if (gameMode === 'expert' || gameMode === 'custom') return 4;
             return 6;
         }
 
         function getMaxMissilesAllowed() {
             if (gameMode === 'god') return 2;
-            if (gameMode === 'expert') return 3;
+            if (gameMode === 'expert' || gameMode === 'custom') return 3;
             return 4;
         }
 
@@ -2443,12 +2489,19 @@
         let combo = 1;
         let maxCombo = 1;
         let doubleShotTimer = 0; // temps restant en ms
+        let multiShotLevel = 0;  // niveau de tir multiple : 0 = simple, 1 = double tir, 2 = triple tir (2 côtés + milieu)
         let shieldHp = 0;        // points de vie du bouclier (1 ou 2) - pas de timer, permanent jusqu'à destruction
         let invulnerableTimer = 0; // temps d'invulnérabilité en ms (bouclier indestructible au respawn)
         let hyperfireTimer = 0;  // temps restant en ms
+        let hyperfireLevel = 0;  // niveau de tir rapide : 0 = standard (vert), 1 = intermédiaire (jaune orangé), 2 = max (rouge)
         let isRespawning = false;
         let respawnTimeStart = 0;
         let waveTextStartTime = 0;
+
+        // Variables de suivi pour l'apprentissage adaptatif en mode AUTO
+        let waveStartTime = 0;
+        let waveFirstShotFired = false;
+        let hasHesitationRecorded = false;
 
         // Entités Boss
         let boss = null;
@@ -3615,7 +3668,9 @@
 
                     ctx.save();
                     ctx.globalAlpha = Math.min(1.0, prog * 1.5);
-                    ctx.fillStyle = '#ff5e00'; // Orange vif
+                    const gatlingColor = (hyperfireLevel >= 2) ? '#ff003c' : '#ff9900'; // Rouge pour niveau 2, jaune-orangé pour niveau 1
+                    const muzzleGlowColor = (hyperfireLevel >= 2) ? '#ff003c' : '#ffe600';
+                    ctx.fillStyle = gatlingColor;
                     ctx.strokeStyle = '#ffffff';
                     ctx.lineWidth = 1.4;
 
@@ -3634,7 +3689,7 @@
 
                     // Petite lueur de bouche centrale
                     if (prog > 0.8) {
-                        ctx.fillStyle = '#ffe600';
+                        ctx.fillStyle = muzzleGlowColor;
                         ctx.beginPath();
                         ctx.arc(0, baseY - 3, 3, 0, Math.PI * 2);
                         ctx.fill();
@@ -3762,18 +3817,54 @@
 
             shoot() {
                 const now = Date.now();
-                const currentCooldown = hyperfireTimer > 0 ? (this.shootCooldown / 3) : this.shootCooldown;
+                // Cadence de tir : normale = shootCooldown, niveau 1 (jaune-orangé) = shootCooldown / 2, niveau 2 (rouge) = shootCooldown / 3.5
+                let currentCooldown = this.shootCooldown;
+                if (hyperfireTimer > 0) {
+                    if (hyperfireLevel >= 2) {
+                        currentCooldown = this.shootCooldown / 3.5;
+                    } else {
+                        currentCooldown = this.shootCooldown / 2;
+                    }
+                }
                 if (now - this.lastShotTime >= currentCooldown) {
+                    let bulletColor = '#39ff14'; // Vert néon par défaut
+                    if (hyperfireTimer > 0) {
+                        if (hyperfireLevel >= 2) {
+                            bulletColor = '#ff1a40'; // Rouge néon éclatant pour le 2ème bonus
+                        } else {
+                            bulletColor = '#ff9900'; // Jaune orangé néon pour le 1er bonus
+                        }
+                    }
+
                     if (doubleShotTimer > 0) {
-                        // Tir double
-                        bullets.push(new Bullet(this.x + 10, this.y));
-                        bullets.push(new Bullet(this.x + this.width - 10, this.y));
+                        if (multiShotLevel >= 2) {
+                            // Triple tir : les 2 tirs latéraux + le tir du milieu
+                            bullets.push(new Bullet(this.x + 10, this.y, bulletColor));
+                            bullets.push(new Bullet(this.x + this.width / 2, this.y, bulletColor));
+                            bullets.push(new Bullet(this.x + this.width - 10, this.y, bulletColor));
+                        } else {
+                            // Double tir : 2 tirs latéraux
+                            bullets.push(new Bullet(this.x + 10, this.y, bulletColor));
+                            bullets.push(new Bullet(this.x + this.width - 10, this.y, bulletColor));
+                        }
                     } else {
                         // Tir simple
-                        bullets.push(new Bullet(this.x + this.width / 2, this.y));
+                        bullets.push(new Bullet(this.x + this.width / 2, this.y, bulletColor));
                     }
                     playSound('shoot');
                     this.lastShotTime = now;
+
+                    // Détection du temps d'hésitation avant le premier tir en mode AUTO
+                    if (!waveFirstShotFired) {
+                        waveFirstShotFired = true;
+                        if (isAutoModeSelected && !isBlastMode && wave !== 100 && !boss && !bossFinal) {
+                            const hesitationDuration = now - waveStartTime;
+                            if (hesitationDuration > 5000 && !hasHesitationRecorded) {
+                                hasHesitationRecorded = true;
+                                recordTableError(currentMultiplierA);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -3814,7 +3905,7 @@
                 } else if (type === 'missile') {
                     this.color = '#ffae00'; // Jaune orangé néon pour le missile soleil
                 } else {
-                    this.color = '#ff5e00'; // Orange pour hyperfire
+                    this.color = '#ff9900'; // Jaune orangé pour hyperfire
                 }
             }
 
@@ -3889,9 +3980,10 @@
 
         // Projectiles du Joueur
         class Bullet {
-            constructor(x, y) {
+            constructor(x, y, color = '#39ff14') {
                 this.x = x;
                 this.y = y;
+                this.color = color;
                 this.width = 4;
                 this.height = 15;
                 this.speed = 9;
@@ -3899,9 +3991,9 @@
             }
 
             draw() {
-                ctx.fillStyle = '#39ff14';
+                ctx.fillStyle = this.color;
                 ctx.shadowBlur = 10;
-                ctx.shadowColor = '#39ff14';
+                ctx.shadowColor = this.color;
                 ctx.fillRect(this.x - this.width / 2, this.y, this.width, this.height);
                 ctx.shadowBlur = 0; // Réinitialiser l'effet de lueur
             }
@@ -5914,9 +6006,9 @@
                     }
                     localStorage.setItem('math_galaga_blast_unlocked', 'true');
                 }
-                // Réinitialiser la vague sauvegardée de ce mode à son départ (le jeu est terminé)
-                if (savedWaves && DEFAULT_MODE_START_WAVES[gameMode]) {
-                    savedWaves[gameMode] = DEFAULT_MODE_START_WAVES[gameMode];
+                // Sauvegarder la vague 100 atteinte pour ce mode (ne pas réinitialiser au niveau de départ)
+                if (savedWaves) {
+                    savedWaves[gameMode] = 100;
                 }
                 saveAllProfiles();
                 if (typeof updateAllModeButtonsState === 'function') updateAllModeButtonsState();
@@ -5931,6 +6023,7 @@
             // Nettoyage de toutes les entités restantes (ennemis, essaim, débris, tirs, power-ups, etc.)
             enemies = [];
             smallShips = [];
+            blueSwarmShips = [];
             swarmShips = [];
             debrisList = [];
             bullets = [];
@@ -6103,41 +6196,54 @@
             virevoltants.push(new VirevoltantBonus());
         }
 
-        // Classe pour les petits vaisseaux de l'essaim (Barrière de protection à partir de la vague 25)
+        // Classe pour les petits débris de roche (Barrière de protection à partir de la vague 25 : 1 PV, mouvement doux)
         class SmallShip {
             constructor(x, y) {
-                this.width = 24;
-                this.height = 18;
+                const ratio = Math.random();
+                this.width = 18 + ratio * 8; // Petite taille (18 à 26 px)
+                this.height = 14 + ratio * 8;
                 this.x = x;
                 this.y = y;
                 
-                // Mouvement aléatoire
+                // Mouvement aléatoire ralenti
                 this.targetX = x;
                 this.targetY = y;
-                this.speed = 1.0 + Math.random() * 1.5;
+                this.speed = 0.35 + Math.random() * 0.45; // Vitesse ralentie et douce (0.35 à 0.8 px/frame)
                 this.active = true;
+                this.hp = 1;
+                this.maxHp = 1;
+                this.flashTimer = 0;
                 
-                // Couleur jaune dominante
-                this.color = '#ffe600';
+                // Rotation douce
+                this.angle = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.025;
+                this.color = '#8a8a9d';
             }
 
             draw() {
                 ctx.save();
                 ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+                ctx.rotate(this.angle);
 
-                // Petit design de vaisseau pointu en forme de triangle néon jaune
+                // Petit polygone rocheux vectoriel
                 ctx.beginPath();
                 ctx.moveTo(0, -this.height / 2);
-                ctx.lineTo(this.width / 2, this.height / 2);
-                ctx.lineTo(0, this.height / 4);
-                ctx.lineTo(-this.width / 2, this.height / 2);
+                ctx.lineTo(this.width / 2, -this.height / 3);
+                ctx.lineTo(this.width / 2.2, this.height / 3);
+                ctx.lineTo(0, this.height / 2);
+                ctx.lineTo(-this.width / 2, this.height / 4);
+                ctx.lineTo(-this.width / 3, -this.height / 2);
                 ctx.closePath();
 
-                ctx.fillStyle = this.color;
-                ctx.strokeStyle = '#fff';
-                ctx.lineWidth = 1;
-                ctx.shadowBlur = 8;
-                ctx.shadowColor = this.color;
+                if (this.flashTimer > 0) {
+                    ctx.fillStyle = '#ffffff';
+                } else {
+                    ctx.fillStyle = this.color;
+                }
+                ctx.strokeStyle = '#c0c0d8';
+                ctx.lineWidth = 1.2;
+                ctx.shadowBlur = 6;
+                ctx.shadowColor = '#505060';
                 ctx.fill();
                 ctx.stroke();
 
@@ -6145,7 +6251,12 @@
             }
 
             update() {
-                // Déplacement aléatoire dans une zone située sous la formation des autres vaisseaux (Y de 280 à 450)
+                if (this.flashTimer > 0) {
+                    this.flashTimer -= 16.7;
+                }
+                this.angle += this.rotationSpeed;
+
+                // Déplacement aléatoire ralenti dans la zone située sous la formation (Y de 280 à 450)
                 if (Math.abs(this.x - this.targetX) < 8 && Math.abs(this.y - this.targetY) < 8) {
                     this.targetX = Math.random() * (canvas.width - this.width - 40) + 20;
                     this.targetY = 280 + Math.random() * 160;
@@ -6158,6 +6269,236 @@
                 if (dist > 0) {
                     this.x += (dx / dist) * this.speed;
                     this.y += (dy / dist) * this.speed;
+                }
+            }
+        }
+
+        // Classe pour l'essaim spécial de petits vaisseaux bleus (vagues 50 à 99)
+        class BlueSwarmShip {
+            constructor(x, y, direction = 1) {
+                this.width = 24;
+                this.height = 18;
+                this.x = x;
+                this.y = y;
+                this.baseY = y;
+                this.direction = direction; // 1 = gauche vers droite, -1 = droite vers gauche
+                this.speed = 1.1;
+                this.hp = 2;
+                this.maxHp = 2;
+                this.isAggro = false;
+                this.state = 'PATROL'; // 'PATROL', 'FLEEING', 'DIVING', 'RETURNING'
+                this.fleeStartTime = 0;
+                this.fleeVx = 0;
+                this.fleeVy = 0;
+                this.diveTargetX = 0;
+                this.diveTargetY = 0;
+                this.diveVx = 0;
+                this.diveVy = 0;
+                this.returnStartX = 0;
+                this.returnStartY = 0;
+                this.returnTargetX = 0;
+                this.returnTargetY = 0;
+                this.returnProgress = 0;
+                this.active = true;
+                this.flashTimer = 0;
+                this.angle = 0;
+                this.timeOffset = Math.random() * Math.PI * 2;
+            }
+
+            static alertAll() {
+                blueSwarmShips.forEach(ship => {
+                    if (ship.active) {
+                        ship.isAggro = true;
+                        if (ship.state === 'PATROL') {
+                            ship.startDivingAttack();
+                        }
+                    }
+                });
+            }
+
+            startDivingAttack() {
+                this.state = 'DIVING';
+                this.isAggro = true;
+                
+                // Cible la position actuelle du joueur au moment du déclenchement (sans guidage en cours de vol)
+                const targetPlayerX = (typeof player !== 'undefined' && player) ? (player.x + player.width / 2 - this.width / 2) : this.x;
+                const targetPlayerY = (typeof player !== 'undefined' && player) ? (player.y + player.height / 2 - this.height / 2) : (canvas.height - 80);
+                
+                this.diveTargetX = targetPlayerX;
+                this.diveTargetY = targetPlayerY;
+
+                const dx = this.diveTargetX - this.x;
+                const dy = this.diveTargetY - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                const attackSpeed = 3.2; // Vitesse de plongée directe
+                if (dist > 0) {
+                    this.diveVx = (dx / dist) * attackSpeed;
+                    this.diveVy = (dy / dist) * attackSpeed;
+                } else {
+                    this.diveVx = 0;
+                    this.diveVy = attackSpeed;
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+
+                // Couleur : bleu quand en patrouille ou en retour, rouge uniquement pendant l'attaque (DIVING) ou la fuite (FLEEING)
+                const isRed = (this.state === 'DIVING' || this.state === 'FLEEING');
+                let shipColor = isRed ? '#ff003c' : '#00f0ff';
+                let glowColor = isRed ? '#ff003c' : '#00f0ff';
+
+                if (this.flashTimer > 0) {
+                    shipColor = '#ffffff';
+                    glowColor = '#ffffff';
+                }
+
+                // Rotation orientée vers la direction de vol ou de plongée
+                if (this.state === 'DIVING') {
+                    const angleDive = Math.atan2(this.diveVy, this.diveVx);
+                    ctx.rotate(angleDive - Math.PI / 2);
+                } else if (this.state === 'FLEEING') {
+                    const angleFlee = Math.atan2(this.fleeVy, this.fleeVx);
+                    ctx.rotate(angleFlee - Math.PI / 2);
+                } else if (this.state === 'RETURNING') {
+                    const dy = this.returnTargetY - this.y;
+                    const dx = this.returnTargetX - this.x;
+                    const angleReturn = Math.atan2(dy, dx);
+                    ctx.rotate(angleReturn - Math.PI / 2);
+                } else {
+                    // En patrouille horizontale
+                    ctx.rotate(this.direction === 1 ? Math.PI / 2 : -Math.PI / 2);
+                }
+
+                // Design triangulaire profilé néon
+                ctx.beginPath();
+                ctx.moveTo(0, -this.height / 2 - 2);
+                ctx.lineTo(this.width / 2, this.height / 2);
+                ctx.lineTo(0, this.height / 4);
+                ctx.lineTo(-this.width / 2, this.height / 2);
+                ctx.closePath();
+
+                ctx.fillStyle = shipColor;
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 1.5;
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = glowColor;
+                ctx.fill();
+                ctx.stroke();
+
+                // Dôme cockpit
+                ctx.beginPath();
+                ctx.arc(0, -2, 3.5, 0, Math.PI * 2);
+                ctx.fillStyle = isRed ? '#ffe600' : '#ffffff';
+                ctx.fill();
+
+                // Indicateur de 1er coup encaissé (contour orange)
+                if (this.hp === 1) {
+                    ctx.strokeStyle = '#ff9900';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+
+                ctx.restore();
+            }
+
+            update() {
+                if (this.flashTimer > 0) {
+                    this.flashTimer -= 16.7;
+                }
+
+                const now = Date.now();
+
+                if (this.state === 'PATROL') {
+                    // Déplacement horizontal calme et lent de gauche à droite ou inversement
+                    this.x += this.direction * this.speed;
+                    this.y = this.baseY + Math.sin(now * 0.003 + this.timeOffset) * 4;
+
+                    // Si le vaisseau sort complètement de l'écran sans avoir été provoqué
+                    if (this.direction === 1 && this.x > canvas.width + 80) {
+                        this.active = false;
+                    } else if (this.direction === -1 && this.x < -80) {
+                        this.active = false;
+                    }
+                } else if (this.state === 'FLEEING') {
+                    // Déplacement rapide de fuite (vers le haut/côtés)
+                    this.x += this.fleeVx;
+                    this.y += this.fleeVy;
+
+                    // Maintenir dans les limites ou rebond doux
+                    if (this.x < 10) { this.x = 10; this.fleeVx = Math.abs(this.fleeVx); }
+                    if (this.x > canvas.width - this.width - 10) { this.x = canvas.width - this.width - 10; this.fleeVx = -Math.abs(this.fleeVx); }
+                    if (this.y < 30) { this.y = 30; this.fleeVy = Math.abs(this.fleeVy); }
+
+                    // Après 2 secondes (2000ms), retour à une plongée ciblée sur le joueur
+                    if (now - this.fleeStartTime >= 2000) {
+                        this.startDivingAttack();
+                    }
+                } else if (this.state === 'DIVING') {
+                    // Plongée en ligne droite vers la position initialement mémorisée (non téléguidée)
+                    this.x += this.diveVx;
+                    this.y += this.diveVy;
+
+                    // Dès qu'il atteint ou dépasse la hauteur du joueur / niveau bas
+                    const playerLevelY = (typeof player !== 'undefined' && player) ? (player.y - 5) : (canvas.height - 100);
+                    if (this.y >= playerLevelY || this.y >= canvas.height - this.height - 15) {
+                        // S'il n'a pas touché le joueur, il amorce sa remontée vers le haut
+                        this.state = 'RETURNING';
+                        this.isAggro = false; // Redevevient pacifique et bleu
+                        this.returnStartX = this.x;
+                        this.returnStartY = this.y;
+                        this.returnTargetX = Math.max(30, Math.min(canvas.width - this.width - 30, this.x + this.direction * 100));
+                        this.returnTargetY = this.baseY;
+                        this.returnProgress = 0;
+                    }
+                } else if (this.state === 'RETURNING') {
+                    // Remonte vers la trajectoire de patrouille en haut
+                    this.returnProgress += 0.02; // Vitesse de remontée
+                    if (this.returnProgress >= 1) {
+                        this.returnProgress = 1;
+                        this.x = this.returnTargetX;
+                        this.y = this.returnTargetY;
+                        this.state = 'PATROL'; // Reprend son chemin initial comme au départ en bleu
+                    } else {
+                        const t = this.returnProgress;
+                        this.x = (1 - t) * this.returnStartX + t * this.returnTargetX;
+                        this.y = (1 - t) * this.returnStartY + t * this.returnTargetY;
+                    }
+                }
+            }
+
+            takeDamage(fromBullet = true) {
+                this.hp--;
+                this.flashTimer = 120;
+                BlueSwarmShip.alertAll();
+
+                if (this.hp > 0) {
+                    // 1er coup : s'enfuit pendant 2s puis revient plonger vers la position du joueur
+                    this.state = 'FLEEING';
+                    this.isAggro = true;
+                    this.fleeStartTime = Date.now();
+                    const escapeAngle = (Math.random() > 0.5 ? -1 : 1) * (0.4 + Math.random() * 0.8) - Math.PI / 2; // Vers le haut
+                    const fleeSpeed = 3.5;
+                    this.fleeVx = Math.cos(escapeAngle) * fleeSpeed;
+                    this.fleeVy = Math.sin(escapeAngle) * fleeSpeed;
+
+                    playAdditionalSound('boss_hit');
+                    for (let p = 0; p < 8; p++) {
+                        particles.push(new Particle(this.x + this.width / 2, this.y + this.height / 2, '#ffffff'));
+                        particles.push(new Particle(this.x + this.width / 2, this.y + this.height / 2, '#ff003c'));
+                    }
+                } else {
+                    // 2ème coup : destruction
+                    this.active = false;
+                    for (let p = 0; p < 20; p++) {
+                        particles.push(new Particle(this.x + this.width / 2, this.y + this.height / 2, '#ff003c'));
+                        particles.push(new Particle(this.x + this.width / 2, this.y + this.height / 2, '#ffe600'));
+                    }
+                    playSound('explosion_ok');
+                    addScore(50, this.x + this.width / 2, this.y + this.height / 2);
+                    trySpawnRandomPowerUp(this.x + this.width / 2, this.y + this.height / 2, 0.25);
                 }
             }
         }
@@ -7320,6 +7661,11 @@
                     const centerY = 145; // Position haute sécurisée (au-dessus des trajectoires de débris)
                     const centerGap = 90; // Écart horizontal entre les 2 vaisseaux centraux
 
+                    let speedScale = 1.0;
+                    if (gameMode === 'novice') speedScale = 1 / 1.5;
+                    else if (gameMode === 'apprenti') speedScale = 1 / 1.2;
+                    else if (isBlastMode) speedScale = 2.0;
+
                     if (i === 0) {
                         // Vaisseau central gauche
                         enemy.targetX = centerX - centerGap / 2 - enemy.width / 2;
@@ -7329,14 +7675,14 @@
                         enemy.targetX = centerX + centerGap / 2 - enemy.width / 2;
                         enemy.targetY = centerY;
                     } else {
-                        // Vaisseaux orbitaux en rotation autour du duo
+                        // Vaisseaux orbitaux en rotation autour du duo (vitesse ralentie et calquée)
                         const orbitersCount = Math.max(1, count - 2);
                         const orbiterIndex = i - 2;
                         const baseAngle = (orbiterIndex / orbitersCount) * (Math.PI * 2);
                         const orbitRadiusX = 210;
                         const orbitRadiusY = 65;
                         const now = Date.now();
-                        const orbitSpeed = 0.0018; // Rotation fluide
+                        const orbitSpeed = (0.00065 + Math.min(0.0003, wave * 0.00001)) * speedScale;
                         const currentAngle = baseAngle + now * orbitSpeed;
 
                         enemy.targetX = centerX + Math.cos(currentAngle) * orbitRadiusX - enemy.width / 2;
@@ -7354,7 +7700,13 @@
                     const spanX = maxX - minX;
 
                     const now = Date.now();
-                    const waveSpeed = 0.00035 + Math.min(0.0002, wave * 0.000008);
+                    let speedScale = 1.0;
+                    if (gameMode === 'novice') speedScale = 1 / 1.5;
+                    else if (gameMode === 'apprenti') speedScale = 1 / 1.2;
+                    else if (isBlastMode) speedScale = 2.0;
+
+                    // Vitesse ralentie pour un défilement calme et une visée très posée
+                    const waveSpeed = (0.000065 + Math.min(0.00003, wave * 0.0000015)) * speedScale;
                     const phaseOffset = (subIndex / Math.max(1, groupSize)) * 0.5;
 
                     let cycleProgress;
@@ -7373,9 +7725,9 @@
 
                     // Altitude sécurisée haute (130px à 170px) nettement au-dessus des débris de roche
                     const baseY = 145 + (isGroupLeft ? -15 : 15);
-                    const waveAmpY = 32;
-                    const waveFreq = 0.0035;
-                    const curY = baseY + Math.sin(curX * 0.015 + now * waveFreq + (isGroupLeft ? 0 : Math.PI)) * waveAmpY;
+                    const waveAmpY = 20; // Amplitude verticale très douce
+                    const waveFreq = 0.00075; // Fréquence d'oscillation lente
+                    const curY = baseY + Math.sin(curX * 0.008 + now * waveFreq + (isGroupLeft ? 0 : Math.PI)) * waveAmpY;
 
                     enemy.targetX = curX;
                     enemy.targetY = curY;
@@ -7391,14 +7743,20 @@
                     const spanX = maxX - minX;
 
                     const now = Date.now();
-                    const baseSpeed = 0.00032 + Math.min(0.0002, wave * 0.000008);
+                    let speedScale = 1.0;
+                    if (gameMode === 'novice') speedScale = 1 / 1.5;
+                    else if (gameMode === 'apprenti') speedScale = 1 / 1.2;
+                    else if (isBlastMode) speedScale = 2.0;
+
+                    // Vitesse ralentie et calquée sur CROISEMENT_ONDES
+                    const baseSpeed = (0.000065 + Math.min(0.00003, wave * 0.0000015)) * speedScale;
                     const spacingOffset = (subIndex / Math.max(1, groupSize)) * 0.45;
 
                     // Mouvement linéaire de base déphasé
                     const tLinear = isTopRow ? (now * baseSpeed + spacingOffset) : (now * baseSpeed + spacingOffset + 1.0);
                     
-                    // Composante de vitesse par à-coups (accélérations saccadées / micro-pauses sans recul)
-                    const jerk = (Math.sin(now * 0.0055 + i * 1.5) * 0.035) + (Math.sin(now * 0.011 + i * 0.8) * 0.015);
+                    // Composante de vitesse par à-coups (accélérations saccadées douces)
+                    const jerk = (Math.sin(now * 0.0028 + i * 1.5) * 0.025) + (Math.sin(now * 0.0055 + i * 0.8) * 0.010);
                     const cycleProgress = (tLinear + jerk + 100) % 2; // cycle 0 -> 2 (0->1 aller, 1->2 retour)
 
                     let curX;
@@ -7459,6 +7817,9 @@
             }
             lastHitOrWaveStartTime = Date.now();
             waveTextStartTime = Date.now();
+            waveStartTime = Date.now();
+            waveFirstShotFired = false;
+            hasHesitationRecorded = false;
             
             // Choisir une table : Mode AUTO adaptatif intelligent ou Sélection manuelle des tables
             if (isBlastMode) {
@@ -7598,7 +7959,24 @@
             }
 
             smallShips = [];
+            blueSwarmShips = [];
             debrisList = [];
+
+            // Essaim de 5 petits vaisseaux bleus (vagues 50 à 99 : 1 chance sur 3 qu'un essaim traverse)
+            if (wave >= 50 && wave <= 99 && Math.random() < (1 / 3)) {
+                const direction = Math.random() > 0.5 ? 1 : -1; // 1 = gauche vers droite, -1 = droite vers gauche
+                const swarmY = 80 + Math.random() * 15; // En haut de l'écran mais sous l'interface HUD (vies, question, etc.)
+                const spacing = 65; // Espacement généreux et aéré entre les vaisseaux
+                for (let i = 0; i < 5; i++) {
+                    let startX;
+                    if (direction === 1) {
+                        startX = -50 - (i * spacing); // Arrivée échelonnée depuis la gauche
+                    } else {
+                        startX = canvas.width + 50 + (i * spacing); // Arrivée échelonnée depuis la droite
+                    }
+                    blueSwarmShips.push(new BlueSwarmShip(startX, swarmY, direction));
+                }
+            }
 
             // Petits vaisseaux (vagues 25 à 34 : 10 à 19 vaisseaux ; vagues 45 à 64 : 10 vaisseaux ; à partir du niveau 65 : plafonné strictement à 10)
             if ((wave >= 25 && wave < 35) || wave >= 45) {
@@ -7625,27 +8003,51 @@
 
         // --- GESTION DES COLLISIONS ---
         function checkCollisions() {
-            // Collision des tirs du joueur sur les petits vaisseaux (vague >= 25)
+            // Collision des tirs du joueur sur les petits débris de roche (vague >= 25)
             for (let bIndex = bullets.length - 1; bIndex >= 0; bIndex--) {
                 const bullet = bullets[bIndex];
                 for (let sIndex = smallShips.length - 1; sIndex >= 0; sIndex--) {
-                    const ship = smallShips[sIndex];
-                    if (bullet.x > ship.x - 4 && 
-                        bullet.x < ship.x + ship.width + 4 &&
-                        bullet.y > ship.y && 
-                        bullet.y < ship.y + ship.height) {
+                    const debris = smallShips[sIndex];
+                    if (bullet.x > debris.x - 4 && 
+                        bullet.x < debris.x + debris.width + 4 &&
+                        bullet.y > debris.y && 
+                        bullet.y < debris.y + debris.height) {
                         
                         bullet.active = false;
                         bullets.splice(bIndex, 1);
 
+                        // Particules d'éclatement de roche
                         for (let p = 0; p < 15; p++) {
-                            particles.push(new Particle(ship.x + ship.width / 2, ship.y + ship.height / 2, '#ffe600'));
+                            particles.push(new Particle(debris.x + debris.width / 2, debris.y + debris.height / 2, '#8a8a9d'));
+                            particles.push(new Particle(debris.x + debris.width / 2, debris.y + debris.height / 2, '#c0c0d8'));
                         }
                         playSound('explosion_ok');
-                        addScore(10, ship.x + ship.width / 2, ship.y + ship.height / 2); // +10 points par petit vaisseau
-                        trySpawnRandomPowerUp(ship.x + ship.width / 2, ship.y + ship.height / 2, 0.15); // Chance de libérer un bonus
+                        addScore(10, debris.x + debris.width / 2, debris.y + debris.height / 2); // +10 points par petit débris
+                        trySpawnRandomPowerUp(debris.x + debris.width / 2, debris.y + debris.height / 2, 0.15); // Chance de libérer un bonus
 
                         smallShips.splice(sIndex, 1);
+                        break;
+                    }
+                }
+            }
+
+            // Collision des tirs du joueur sur l'essaim de vaisseaux bleus (vagues 50 à 99)
+            for (let bIndex = bullets.length - 1; bIndex >= 0; bIndex--) {
+                const bullet = bullets[bIndex];
+                for (let bsIndex = blueSwarmShips.length - 1; bsIndex >= 0; bsIndex--) {
+                    const bShip = blueSwarmShips[bsIndex];
+                    if (bShip.active &&
+                        bullet.x > bShip.x - 4 && 
+                        bullet.x < bShip.x + bShip.width + 4 &&
+                        bullet.y > bShip.y - 4 && 
+                        bullet.y < bShip.y + bShip.height + 4) {
+                        
+                        bullet.active = false;
+                        bullets.splice(bIndex, 1);
+                        bShip.takeDamage(true);
+                        if (!bShip.active) {
+                            blueSwarmShips.splice(bsIndex, 1);
+                        }
                         break;
                     }
                 }
@@ -8051,6 +8453,25 @@
                 }
             }
 
+            // Collision directe des petits vaisseaux bleus avec le joueur
+            for (let i = blueSwarmShips.length - 1; i >= 0; i--) {
+                const bShip = blueSwarmShips[i];
+                if (bShip.active &&
+                    bShip.x < player.x + player.width &&
+                    bShip.x + bShip.width > player.x &&
+                    bShip.y < player.y + player.height &&
+                    bShip.y + bShip.height > player.y) {
+                    
+                    handlePlayerHit();
+                    for (let p = 0; p < 20; p++) {
+                        particles.push(new Particle(bShip.x + bShip.width / 2, bShip.y + bShip.height / 2, '#ff003c'));
+                        particles.push(new Particle(bShip.x + bShip.width / 2, bShip.y + bShip.height / 2, '#00f0ff'));
+                    }
+                    blueSwarmShips.splice(i, 1);
+                    break;
+                }
+            }
+
             // Collision physique du Boss avec le joueur
             if (boss && 
                 boss.x < player.x + player.width &&
@@ -8158,7 +8579,12 @@
                     
                     // Activer le PowerUp
                     if (pu.type === 'double') {
-                        doubleShotTimer = 8000; // 8 secondes de tir double
+                        if (doubleShotTimer > 0) {
+                            multiShotLevel = Math.min(2, multiShotLevel + 1); // Passe au triple tir (2 tirs latéraux + milieu)
+                        } else {
+                            multiShotLevel = 1; // Double tir
+                        }
+                        doubleShotTimer = 8000; // 8 secondes de tir multiple
                     } else if (pu.type === 'shield') {
                         if (shieldHp > 0) {
                             shieldHp = Math.min(2, shieldHp + 1); // 2 boucliers max (absorbe 2 coups)
@@ -8166,7 +8592,12 @@
                             shieldHp = 1;
                         }
                     } else if (pu.type === 'hyperfire') {
-                        hyperfireTimer = 8000; // 8 secondes de tir triple vitesse
+                        if (hyperfireTimer > 0) {
+                            hyperfireLevel = Math.min(2, hyperfireLevel + 1); // Passe au niveau 2 (rouge)
+                        } else {
+                            hyperfireLevel = 1; // Niveau 1 (jaune orangé)
+                        }
+                        hyperfireTimer = 8000; // 8 secondes de tir rapide
                     } else if (pu.type === 'missile') {
                         if (missilesCount < getMaxMissilesAllowed()) {
                             missilesCount++; // 1 missile soleil supplémentaire (selon plafond mode)
@@ -8876,6 +9307,12 @@
                     updateAndroidMissileBtn();
                     playerMissiles.push(new HomingMissile(player.x + player.width / 2, player.y));
                     playSound('shoot_missile');
+
+                    // En mode AUTO, l'utilisation d'un mini missile soleil indique une hésitation / difficulté sur la table en cours
+                    if (isAutoModeSelected && !isBlastMode && wave !== 100 && !boss && !bossFinal && !hasHesitationRecorded) {
+                        hasHesitationRecorded = true;
+                        recordTableError(currentMultiplierA);
+                    }
                 }
             }
         }
@@ -9027,7 +9464,6 @@
         const settingsStartWaveVal = document.getElementById('settings-startwave-val');
         const decStartWaveBtn = document.getElementById('dec-startwave-btn');
         const incStartWaveBtn = document.getElementById('inc-startwave-btn');
-        const startCustomBtn = document.getElementById('start-custom-btn');
 
         const toggleMusicBtn = document.getElementById('toggle-music-btn');
         const toggleBlastUnlockBtn = document.getElementById('toggle-blast-unlock-btn');
@@ -9055,53 +9491,82 @@
         const startExpertBtn = document.getElementById('start-expert-btn');
         const startGodBtn = document.getElementById('start-god-btn');
 
+        function applyButtonProgressFill(btn, percent, colorHex, isLocked = false) {
+            if (!btn) return;
+            btn.classList.add('btn-mode-progress');
+            if (isLocked) {
+                btn.style.background = 'transparent';
+                btn.style.color = '#777';
+                return;
+            }
+            const pct = Math.max(0, Math.min(100, Math.round(percent)));
+            if (pct >= 100) {
+                btn.style.background = colorHex;
+                btn.style.color = '#000000';
+            } else if (pct > 0) {
+                btn.style.background = `linear-gradient(to right, ${colorHex} 0%, ${colorHex} ${pct}%, transparent ${pct}%, transparent 100%)`;
+                if (pct >= 55) {
+                    btn.style.color = '#000000';
+                } else {
+                    btn.style.color = colorHex;
+                }
+            } else {
+                btn.style.background = 'transparent';
+                btn.style.color = colorHex;
+            }
+        }
+
         function updateAllModeButtonsState() {
             const maxReached = maxWaveReached || 1;
 
             // Vagues de reprise par mode
             const wNovice = (savedWaves && typeof savedWaves.novice === 'number' && savedWaves.novice > 1) ? savedWaves.novice : 1;
-            const wApprenti = (savedWaves && typeof savedWaves.apprenti === 'number' && savedWaves.apprenti > 10) ? savedWaves.apprenti : 10;
-            const wExpert = (savedWaves && typeof savedWaves.expert === 'number' && savedWaves.expert > 25) ? savedWaves.expert : 25;
+            const wApprenti = (savedWaves && typeof savedWaves.apprenti === 'number' && savedWaves.apprenti > 1) ? savedWaves.apprenti : 1;
+            const wExpert = (savedWaves && typeof savedWaves.expert === 'number' && savedWaves.expert > 1) ? savedWaves.expert : 1;
             const wGod = (savedWaves && typeof savedWaves.god === 'number' && savedWaves.god > 1) ? savedWaves.god : 1;
 
-            // 1. NOVICE
+            // 1. NOVICE (Progression sur 100 vagues)
             if (startNoviceBtn) {
                 if (wNovice > 1) {
                     startNoviceBtn.innerHTML = `Novice <span class="btn-subtext">(${wNovice})</span>`;
                 } else {
                     startNoviceBtn.innerHTML = 'Novice';
                 }
+                applyButtonProgressFill(startNoviceBtn, wNovice, '#39ff14', false);
             }
 
-            // 2. APPRENTI
+            // 2. APPRENTI (Progression sur 100 vagues)
             if (startApprentiBtn) {
-                if (wApprenti > 10) {
+                if (wApprenti > 1) {
                     startApprentiBtn.innerHTML = `Apprenti <span class="btn-subtext">(${wApprenti})</span>`;
                 } else {
                     startApprentiBtn.innerHTML = 'Apprenti';
                 }
+                applyButtonProgressFill(startApprentiBtn, wApprenti, '#ffe600', false);
             }
 
-            // 3. EXPERT (Débloqué si la vague 30 a été atteinte en une partie)
+            // 3. EXPERT (Débloqué si la vague 30 a été atteinte.)
             if (startExpertBtn) {
                 if (maxReached >= 30) {
                     startExpertBtn.classList.remove('menu-btn-locked');
-                    if (wExpert > 25) {
+                    if (wExpert > 1) {
                         startExpertBtn.innerHTML = `Expert <span class="btn-subtext">(${wExpert})</span>`;
                     } else {
                         startExpertBtn.innerHTML = 'Expert';
                     }
                     startExpertBtn.removeAttribute('data-tooltip');
                     startExpertBtn.removeAttribute('title');
+                    applyButtonProgressFill(startExpertBtn, wExpert, '#ff007f', false);
                 } else {
                     startExpertBtn.classList.add('menu-btn-locked');
                     startExpertBtn.innerHTML = '🔒 Expert <span class="btn-subtext">(Niv 30)</span>';
                     startExpertBtn.removeAttribute('title');
-                    startExpertBtn.setAttribute('data-tooltip', `Nécessite d'atteindre la vague 30 en une partie.`);
+                    startExpertBtn.setAttribute('data-tooltip', `Nécessite d'atteindre la vague 30.`);
+                    applyButtonProgressFill(startExpertBtn, 0, '#ff007f', true);
                 }
             }
 
-            // 4. GOD (Débloqué si la vague 50 a été atteinte en une partie)
+            // 4. GOD (Débloqué si la vague 50 a été atteinte.)
             if (startGodBtn) {
                 if (maxReached >= 50) {
                     startGodBtn.classList.remove('menu-btn-locked');
@@ -9112,38 +9577,32 @@
                     }
                     startGodBtn.removeAttribute('data-tooltip');
                     startGodBtn.removeAttribute('title');
+                    applyButtonProgressFill(startGodBtn, wGod, '#ff003c', false);
                 } else {
                     startGodBtn.classList.add('menu-btn-locked');
                     startGodBtn.innerHTML = '🔒 God <span class="btn-subtext">(Niv 50)</span>';
                     startGodBtn.removeAttribute('title');
-                    startGodBtn.setAttribute('data-tooltip', `Nécessite d'atteindre la vague 50 en une partie.`);
+                    startGodBtn.setAttribute('data-tooltip', `Nécessite d'atteindre la vague 50.`);
+                    applyButtonProgressFill(startGodBtn, 0, '#ff003c', true);
                 }
             }
 
-            // 5. NIVEAU PERSONNALISÉ (Débloqué si la vague 80 a été atteinte en une partie)
-            if (startCustomBtn) {
-                if (maxReached >= 80) {
-                    startCustomBtn.classList.remove('menu-btn-locked');
-                    startCustomBtn.innerHTML = 'Niveau personnalisé';
-                    startCustomBtn.removeAttribute('data-tooltip');
-                    startCustomBtn.removeAttribute('title');
-                } else {
-                    startCustomBtn.classList.add('menu-btn-locked');
-                    startCustomBtn.innerHTML = '🔒 Niveau perso. <span class="btn-subtext">(Niv 80)</span>';
-                    startCustomBtn.removeAttribute('title');
-                    startCustomBtn.setAttribute('data-tooltip', `Nécessite d'atteindre la vague 80 en une partie.`);
-                }
-            }
-
-            // 6. BLAST (Débloqué si la vague 100 a été atteinte en une partie ou déverrouillage manuel)
+            // 5. BLAST (Débloqué si la vague 100 a été atteinte au total ou déverrouillage manuel)
             if (startBlastBtn) {
+                const blastWave = (blastBestScore && blastBestScore.wave) ? blastBestScore.wave : 0;
                 if (isBlastUnlocked || maxReached >= 100) {
                     startBlastBtn.disabled = false;
                     startBlastBtn.classList.remove('btn-blast-locked');
                     startBlastBtn.classList.add('btn-blast');
-                    startBlastBtn.innerHTML = 'BLAST !!!';
-                    startBlastBtn.removeAttribute('data-tooltip');
+                    if (blastWave > 0) {
+                        startBlastBtn.innerHTML = `BLAST !!! <span class="btn-subtext">(${blastWave})</span>`;
+                    } else {
+                        startBlastBtn.innerHTML = 'BLAST !!!';
+                    }
+                    startBlastBtn.setAttribute('data-tooltip', `Mode arcade : on tire sur tout ce qui bouge !`);
                     startBlastBtn.removeAttribute('title');
+
+                    applyButtonProgressFill(startBlastBtn, blastWave, '#ff5e00', false);
 
                     toggleBlastUnlockBtn.textContent = 'DÉBLOQUÉ';
                     toggleBlastUnlockBtn.style.borderColor = '#ff5e00';
@@ -9155,7 +9614,9 @@
                     startBlastBtn.classList.add('btn-blast-locked');
                     startBlastBtn.innerHTML = '🔒 BLAST <span class="btn-subtext">(Niv 100)</span>';
                     startBlastBtn.removeAttribute('title');
-                    startBlastBtn.setAttribute('data-tooltip', `Nécessite d'atteindre la vague 100 en une partie.`);
+                    startBlastBtn.setAttribute('data-tooltip', `Nécessite d'atteindre la vague 100.`);
+
+                    applyButtonProgressFill(startBlastBtn, 0, '#ff5e00', true);
 
                     toggleBlastUnlockBtn.textContent = 'VERROUILLÉ';
                     toggleBlastUnlockBtn.style.borderColor = '#555';
@@ -9290,7 +9751,7 @@
         if (resetProgressionBtn) {
             resetProgressionBtn.addEventListener('click', async () => {
                 const confirmed = await showCustomConfirm(
-                    `Voulez-vous réinitialiser la progression de tous les modes pour <strong style="color:var(--neon-yellow);">${currentProfile.name}</strong> ?<br><br><span style="font-size:0.85rem; color:#aaa;">(Novice: 1, Apprenti: 10, Expert: 25, God: 1)</span>`,
+                    `Voulez-vous réinitialiser la progression de tous les modes pour <strong style="color:var(--neon-yellow);">${currentProfile.name}</strong> ?<br><br><span style="font-size:0.85rem; color:#aaa;">(Novice: 1, Apprenti: 1, Expert: 1, God: 1)</span>`,
                     "PROGRESSION DES MODES",
                     false,
                     "RÉINITIALISER"
@@ -9298,8 +9759,8 @@
                 if (confirmed) {
                     savedWaves = {
                         novice: 1,
-                        apprenti: 10,
-                        expert: 25,
+                        apprenti: 1,
+                        expert: 1,
                         god: 1
                     };
                     saveAllProfiles();
@@ -9346,8 +9807,8 @@
         if (resetLearningBtn) {
             resetLearningBtn.addEventListener('click', async () => {
                 const confirmed = await showCustomConfirm(
-                    `Voulez-vous réinitialiser les statistiques d'apprentissage de la table AUTO pour <strong style="color:var(--neon-yellow);">${currentProfile.name}</strong> ?`,
-                    "TABLE AUTO",
+                    `Voulez-vous réinitialiser l'historique d'apprentissage AUTO pour <strong style="color:var(--neon-yellow);">${currentProfile.name}</strong> ?`,
+                    "RÉINITIALISER L'APPRENTISSAGE",
                     false,
                     "RÉINITIALISER"
                 );
@@ -9375,14 +9836,32 @@
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             // 2. Mises à jour des Timers de Power-ups (60 FPS -> environ 16.7ms par frame)
-            if (doubleShotTimer > 0) doubleShotTimer -= 16.7;
+            if (doubleShotTimer > 0) {
+                doubleShotTimer -= 16.7;
+                if (doubleShotTimer <= 0) {
+                    doubleShotTimer = 0;
+                    multiShotLevel = 0;
+                }
+            } else {
+                multiShotLevel = 0;
+            }
             if (invulnerableTimer > 0) invulnerableTimer -= 16.7;
-            if (hyperfireTimer > 0) hyperfireTimer -= 16.7;
+            if (hyperfireTimer > 0) {
+                hyperfireTimer -= 16.7;
+                if (hyperfireTimer <= 0) {
+                    hyperfireTimer = 0;
+                    hyperfireLevel = 0;
+                }
+            } else {
+                hyperfireLevel = 0;
+            }
 
             // Dès que le vaisseau Boss Final est en attente d'une réponse de calcul (phases de sélection / pulsation), arrêter immédiatement le double tir et le tir rapide
             if (bossFinal && (bossFinal.phase === 'INTERACTIVE' || bossFinal.phase === 'PULSING')) {
                 doubleShotTimer = 0;
+                multiShotLevel = 0;
                 hyperfireTimer = 0;
+                hyperfireLevel = 0;
             }
 
             // Gestion du respawn joueur (attente 2s)
@@ -9516,6 +9995,16 @@
                     });
                 }
 
+                // Mise à jour de l'essaim de petits vaisseaux bleus (vagues 50 à 99)
+                for (let i = blueSwarmShips.length - 1; i >= 0; i--) {
+                    if (timeScale >= 0.95 || Math.random() < timeScale) {
+                        blueSwarmShips[i].update();
+                    }
+                    if (!blueSwarmShips[i].active) {
+                        blueSwarmShips.splice(i, 1);
+                    }
+                }
+
                 // Gestion et mise à jour des débris de roche (à partir de la vague 35, et vague 100 du Boss Final en phase d'attaque)
                 const isBossFinalAttackDebris = (wave === 100 && bossFinal && bossFinal.phase === 'CANNON_PHASE');
                 if ((wave >= 35 && wave !== 100) || isBossFinalAttackDebris) {
@@ -9638,6 +10127,7 @@
                 if ((wave >= 25 && wave < 35) || wave >= 45) {
                     smallShips.forEach(ship => ship.draw());
                 }
+                blueSwarmShips.forEach(ship => ship.draw());
                 
                 // Dessin du Boss et de ses bombes
                 if (boss) boss.draw();
@@ -9765,9 +10255,11 @@
             combo = 1;
             maxCombo = 1;
             doubleShotTimer = 0;
+            multiShotLevel = 0;
             shieldHp = 0;
             invulnerableTimer = 0;
             hyperfireTimer = 0;
+            hyperfireLevel = 0;
             timeFreezeEndTime = 0;
             isRespawning = false;
             respawnTimeStart = 0;
@@ -9782,6 +10274,7 @@
             enemyBullets = [];
             enemies = [];
             smallShips = [];
+            blueSwarmShips = [];
             debrisList = [];
             bossFinal = null;
             swarmShips = [];
@@ -9816,12 +10309,12 @@
             startGame(startW, false, 'novice');
         });
         document.getElementById('start-apprenti-btn').addEventListener('click', () => {
-            const startW = (savedWaves && typeof savedWaves.apprenti === 'number' && savedWaves.apprenti > 10) ? savedWaves.apprenti : 10;
+            const startW = (savedWaves && typeof savedWaves.apprenti === 'number' && savedWaves.apprenti > 1) ? savedWaves.apprenti : 1;
             startGame(startW, false, 'apprenti');
         });
         document.getElementById('start-expert-btn').addEventListener('click', () => {
             if ((maxWaveReached || 1) >= 30) {
-                const startW = (savedWaves && typeof savedWaves.expert === 'number' && savedWaves.expert > 25) ? savedWaves.expert : 25;
+                const startW = (savedWaves && typeof savedWaves.expert === 'number' && savedWaves.expert > 1) ? savedWaves.expert : 1;
                 startGame(startW, false, 'expert');
             }
         });
@@ -9829,11 +10322,6 @@
             if ((maxWaveReached || 1) >= 50) {
                 const startW = (savedWaves && typeof savedWaves.god === 'number' && savedWaves.god > 1) ? savedWaves.god : 1;
                 startGame(startW, false, 'god');
-            }
-        });
-        document.getElementById('start-custom-btn').addEventListener('click', () => {
-            if ((maxWaveReached || 1) >= 80) {
-                openSettings();
             }
         });
         document.getElementById('start-blast-btn').addEventListener('click', () => {
@@ -11176,8 +11664,8 @@
                 personalBestScore: 0,
                 savedWaves: {
                     novice: 1,
-                    apprenti: 10,
-                    expert: 25,
+                    apprenti: 1,
+                    expert: 1,
                     god: 1
                 },
                 tableLearningStats: {
