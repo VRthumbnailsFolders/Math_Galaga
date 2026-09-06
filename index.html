@@ -1693,7 +1693,7 @@
             </div>
 
             <button class="menu-btn btn-intro-play" id="intro-play-btn">JOUER</button>
-            <div class="intro-credits">Christophe DELATTRE - 2026 v3.3</div>
+            <div class="intro-credits">Christophe DELATTRE - 2026 v3.4</div>
         </div>
 
         <!-- Menu Principal (Sommaire) -->
@@ -10918,8 +10918,8 @@
             const windowWidth = vp ? vp.width : (window.innerWidth || document.documentElement.clientWidth);
             const windowHeight = vp ? vp.height : (window.innerHeight || document.documentElement.clientHeight);
 
-            // Calcul du facteur d'échelle exact
-            const scale = Math.min(windowWidth / baseWidth, windowHeight / baseHeight, 1);
+            // Calcul du facteur d'échelle exact (s'agrandit ou se rétrécit pour remplir au maximum l'écran en conservant le ratio 900x700)
+            const scale = Math.min(windowWidth / baseWidth, windowHeight / baseHeight);
             container.style.transform = `scale(${scale})`;
 
             // Mettre à jour l'alignement des zones de contrôle tactiles
