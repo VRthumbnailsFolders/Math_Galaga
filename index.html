@@ -249,6 +249,26 @@
             to { text-shadow: 0 0 15px var(--neon-pink), 0 0 30px var(--neon-pink), 0 0 40px var(--neon-pink); }
         }
 
+        /* Modes de Qualité Graphique / Optimisation Performance Mobile */
+        body.perf-min #game-container {
+            box-shadow: 0 0 8px rgba(0, 240, 255, 0.4) !important;
+        }
+        body.perf-min #equation-panel {
+            box-shadow: none !important;
+        }
+        body.perf-min #questionText {
+            text-shadow: none !important;
+            animation: none !important;
+        }
+        body.perf-min .hud-label,
+        body.perf-min #combo-badge {
+            text-shadow: none !important;
+            animation: none !important;
+        }
+        body.perf-moyen #questionText {
+            animation: none !important;
+        }
+
         /* Canvas de jeu principal : curseur invisible pendant le jeu */
         #game-canvas {
             display: block;
@@ -1693,7 +1713,7 @@
             </div>
 
             <button class="menu-btn btn-intro-play" id="intro-play-btn">JOUER</button>
-            <div class="intro-credits">Christophe DELATTRE - 2026 v3.4</div>
+            <div class="intro-credits">Christophe DELATTRE - 2026 v3.5</div>
         </div>
 
         <!-- Menu Principal (Sommaire) -->
@@ -1804,6 +1824,10 @@
                     <button class="menu-btn btn-novice" id="dec-sensitivity-btn" data-tooltip-small="Diminuer la sensibilité de déplacement du vaisseau (min 1)" style="margin-top: 0; padding: 4px 12px; font-size: 1.15rem;">-</button>
                     <span id="settings-sensitivity-val" style="font-weight: bold; font-size: 1.4rem; color: #fff; min-width: 35px; text-align: center; display: inline-block;">3</span>
                     <button class="menu-btn btn-novice" id="inc-sensitivity-btn" data-tooltip-small="Augmenter la sensibilité de déplacement du vaisseau (max 5)" style="margin-top: 0; padding: 4px 12px; font-size: 1.15rem;">+</button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px; font-size: 1.15rem; width: 100%; justify-content: center;">
+                    <span style="color: var(--neon-blue); text-shadow: 0 0 5px var(--neon-blue); font-weight: bold;">QUALITÉ :</span>
+                    <button class="menu-btn" id="toggle-quality-btn" data-tooltip="Ajuster la qualité graphique (AUTO intelligent avec mesure FPS, MAX, MOYEN, MIN) pour optimiser la fluidité." style="margin-top: 0; padding: 5px 14px; font-size: 1rem; min-width: 145px; text-align: center; display: inline-flex; justify-content: center; align-items: center;">AUTO</button>
                 </div>
                 <div style="display: flex; align-items: center; gap: 15px; font-size: 1.15rem; width: 100%; justify-content: center;">
                     <span style="color: var(--neon-blue); text-shadow: 0 0 5px var(--neon-blue); font-weight: bold;">MUSIQUE :</span>
@@ -2486,6 +2510,101 @@
         // --- SYSTÈME DE JEU SUR CANVAS ---
         const canvas = document.getElementById('game-canvas');
         const ctx = canvas.getContext('2d');
+
+        // Qualité graphique ('auto', 'max', 'moyen', 'min') pour optimisation mobile / tablette
+        let qualitySettingMode = localStorage.getItem('math_galaga_quality_mode') || 'auto';
+        if (!['auto', 'max', 'moyen', 'min'].includes(qualitySettingMode)) {
+            qualitySettingMode = 'auto';
+        }
+
+        let effectiveQuality = (qualitySettingMode === 'auto') ? 'max' : qualitySettingMode;
+        let graphicsQuality = effectiveQuality;
+
+        // Variables pour le suivi et l'ajustement dynamique du framerate (FPS) en mode AUTO
+        let fpsFrameCount = 0;
+        let fpsSampleStartTime = performance.now();
+        let lowFpsSamplesCount = 0;
+        let highFpsSamplesCount = 0;
+
+        // Interception ultra-performante et transparente de shadowBlur sur ctx pour économiser le GPU
+        const rawShadowBlurDescriptor = Object.getOwnPropertyDescriptor(CanvasRenderingContext2D.prototype, 'shadowBlur');
+        if (rawShadowBlurDescriptor) {
+            Object.defineProperty(ctx, 'shadowBlur', {
+                set(val) {
+                    let finalVal = val;
+                    if (graphicsQuality === 'min') {
+                        finalVal = 0;
+                    } else if (graphicsQuality === 'moyen') {
+                        finalVal = Math.min(val, 6);
+                    }
+                    rawShadowBlurDescriptor.set.call(this, finalVal);
+                },
+                get() {
+                    return rawShadowBlurDescriptor.get.call(this);
+                },
+                configurable: true
+            });
+        }
+
+        function applyGraphicsQuality(quality, isDynamicAuto = false) {
+            graphicsQuality = quality;
+            effectiveQuality = quality;
+
+            // 1. Étoiles d'arrière-plan (En Moyen et Min : masquées pour soulager le GPU/CPU)
+            const starsContainer = document.getElementById('stars-container');
+            if (starsContainer) {
+                if (graphicsQuality === 'max') {
+                    starsContainer.style.display = 'block';
+                } else {
+                    starsContainer.style.display = 'none';
+                }
+            }
+
+            // 2. Classes CSS sur document.body
+            document.body.classList.remove('perf-max', 'perf-moyen', 'perf-min');
+            document.body.classList.add('perf-' + quality);
+
+            // 3. Mise à jour de l'affichage du bouton
+            const toggleQualityBtn = document.getElementById('toggle-quality-btn');
+            if (toggleQualityBtn) {
+                if (qualitySettingMode === 'auto') {
+                    toggleQualityBtn.innerHTML = `AUTO <span style="font-size:0.8rem; opacity:0.85;">(${quality.toUpperCase()})</span>`;
+                    toggleQualityBtn.style.borderColor = 'var(--neon-blue)';
+                    toggleQualityBtn.style.color = 'var(--neon-blue)';
+                    toggleQualityBtn.style.boxShadow = '0 0 10px rgba(0, 240, 255, 0.4)';
+                } else if (quality === 'max') {
+                    toggleQualityBtn.textContent = 'MAX';
+                    toggleQualityBtn.style.borderColor = 'var(--neon-green)';
+                    toggleQualityBtn.style.color = 'var(--neon-green)';
+                    toggleQualityBtn.style.boxShadow = '0 0 10px rgba(57, 255, 20, 0.35)';
+                } else if (quality === 'moyen') {
+                    toggleQualityBtn.textContent = 'MOYEN';
+                    toggleQualityBtn.style.borderColor = 'var(--neon-yellow)';
+                    toggleQualityBtn.style.color = 'var(--neon-yellow)';
+                    toggleQualityBtn.style.boxShadow = '0 0 10px rgba(255, 230, 0, 0.35)';
+                } else {
+                    toggleQualityBtn.textContent = 'MIN';
+                    toggleQualityBtn.style.borderColor = 'var(--neon-pink)';
+                    toggleQualityBtn.style.color = 'var(--neon-pink)';
+                    toggleQualityBtn.style.boxShadow = '0 0 10px rgba(255, 0, 127, 0.35)';
+                }
+            }
+        }
+
+        function setQualitySettingMode(mode) {
+            qualitySettingMode = mode;
+            localStorage.setItem('math_galaga_quality_mode', mode);
+            if (mode === 'auto') {
+                fpsFrameCount = 0;
+                fpsSampleStartTime = performance.now();
+                lowFpsSamplesCount = 0;
+                highFpsSamplesCount = 0;
+                effectiveQuality = 'max';
+                applyGraphicsQuality('max');
+            } else {
+                applyGraphicsQuality(mode);
+            }
+        }
 
         // États principaux du jeu
         let score = 0;
@@ -7388,6 +7507,14 @@
         // Effets d'Explosion
         class Particle {
             constructor(x, y, color) {
+                if (graphicsQuality === 'min' && Math.random() > 0.25) {
+                    this.alpha = 0;
+                    return;
+                }
+                if (graphicsQuality === 'moyen' && Math.random() > 0.55) {
+                    this.alpha = 0;
+                    return;
+                }
                 this.x = x;
                 this.y = y;
                 this.size = Math.random() * 4 + 2;
@@ -7399,6 +7526,7 @@
             }
 
             draw() {
+                if (this.alpha <= 0) return;
                 ctx.save();
                 ctx.globalAlpha = this.alpha;
                 ctx.fillStyle = this.color;
@@ -7409,6 +7537,7 @@
             }
 
             update() {
+                if (this.alpha <= 0) return;
                 this.x += this.speedX;
                 this.y += this.speedY;
                 this.alpha -= this.decay;
@@ -9680,6 +9809,7 @@
         const incSensitivityBtn = document.getElementById('inc-sensitivity-btn');
 
         const toggleMusicBtn = document.getElementById('toggle-music-btn');
+        const toggleQualityBtn = document.getElementById('toggle-quality-btn');
         const toggleBlastUnlockBtn = document.getElementById('toggle-blast-unlock-btn');
         const startBlastBtn = document.getElementById('start-blast-btn');
 
@@ -9687,6 +9817,7 @@
         settingsMissilesVal.textContent = startingMissiles;
         settingsStartWaveVal.textContent = startingWaveConfig;
         if (settingsSensitivityVal) settingsSensitivityVal.textContent = playerSensitivity;
+        setQualitySettingMode(qualitySettingMode);
 
         function updateMusicButton() {
             toggleMusicBtn.textContent = isMusicEnabled ? "OUI" : "NON";
@@ -9882,6 +10013,7 @@
                 settingsMissilesVal.textContent = startingMissiles;
                 settingsStartWaveVal.textContent = startingWaveConfig;
                 if (settingsSensitivityVal) settingsSensitivityVal.textContent = playerSensitivity;
+                setQualitySettingMode(qualitySettingMode);
                 updateMusicButton();
                 updateBlastButtonState();
                 updatePlayCustomBtnVisibility();
@@ -9896,6 +10028,20 @@
             localStorage.setItem('math_galaga_music_enabled', isMusicEnabled);
             updateMusicButton();
         });
+
+        if (toggleQualityBtn) {
+            toggleQualityBtn.addEventListener('click', () => {
+                if (qualitySettingMode === 'auto') {
+                    setQualitySettingMode('max');
+                } else if (qualitySettingMode === 'max') {
+                    setQualitySettingMode('moyen');
+                } else if (qualitySettingMode === 'moyen') {
+                    setQualitySettingMode('min');
+                } else {
+                    setQualitySettingMode('auto');
+                }
+            });
+        }
 
         decLivesBtn.addEventListener('click', () => {
             if (startingLives > 1) {
@@ -10068,6 +10214,47 @@
         function gameLoop() {
             if (!isGameRunning) return;
             const now = Date.now();
+
+            // Suivi du framerate et ajustement dynamique automatique (Mode AUTO)
+            if (qualitySettingMode === 'auto') {
+                fpsFrameCount++;
+                const currentTime = performance.now();
+                const elapsed = currentTime - fpsSampleStartTime;
+                if (elapsed >= 1500) { // Échantillonnage toutes les 1.5s
+                    const currentFps = (fpsFrameCount * 1000) / elapsed;
+                    fpsFrameCount = 0;
+                    fpsSampleStartTime = currentTime;
+
+                    // Dégradation de qualité si saccades prolongées (< 44 FPS)
+                    if (currentFps < 44) {
+                        lowFpsSamplesCount++;
+                        highFpsSamplesCount = 0;
+                        if (lowFpsSamplesCount >= 2) { // 2 échantillons consécutifs bas (~3s)
+                            lowFpsSamplesCount = 0;
+                            if (effectiveQuality === 'max') {
+                                applyGraphicsQuality('moyen', true);
+                            } else if (effectiveQuality === 'moyen') {
+                                applyGraphicsQuality('min', true);
+                            }
+                        }
+                    } else if (currentFps >= 57) {
+                        highFpsSamplesCount++;
+                        lowFpsSamplesCount = 0;
+                        // Remontée prudente si le 60 FPS est parfaitement tenu sur la durée (~6s)
+                        if (highFpsSamplesCount >= 4) {
+                            highFpsSamplesCount = 0;
+                            if (effectiveQuality === 'min') {
+                                applyGraphicsQuality('moyen', true);
+                            } else if (effectiveQuality === 'moyen') {
+                                applyGraphicsQuality('max', true);
+                            }
+                        }
+                    } else {
+                        lowFpsSamplesCount = 0;
+                        highFpsSamplesCount = 0;
+                    }
+                }
+            }
 
             // 1. Nettoyage du canvas avec léger effet de traînée rétro
             ctx.fillStyle = 'rgba(10, 10, 22, 0.3)';
@@ -10485,6 +10672,14 @@
             score = 0;
             lives = Math.min(startingLives, getMaxLivesAllowed());
             wave = startWave;
+            fpsFrameCount = 0;
+            fpsSampleStartTime = performance.now();
+            lowFpsSamplesCount = 0;
+            highFpsSamplesCount = 0;
+            if (qualitySettingMode === 'auto') {
+                effectiveQuality = 'max';
+                applyGraphicsQuality('max');
+            }
             if (gameMode !== 'custom' && wave > maxWaveReached) {
                 maxWaveReached = wave;
                 if (currentProfile) {
