@@ -1605,6 +1605,76 @@
             transition: width 2.4s cubic-bezier(0.1, 0.7, 0.3, 1);
             box-shadow: 0 0 15px var(--neon-green);
         }
+
+        /* ==========================================================================
+           BOUTONS DU MENU DES RÉGLAGES AU SURVOL (TEXTE NOIR & CONTRASTE PARFAIT)
+           ========================================================================== */
+        #settings-overlay button:hover,
+        #settings-overlay .menu-btn:hover {
+            color: #000000 !important;
+            text-shadow: none !important;
+            transform: scale(1.05);
+        }
+
+        #settings-overlay button:hover *,
+        #settings-overlay .menu-btn:hover * {
+            color: #000000 !important;
+            text-shadow: none !important;
+        }
+
+        #settings-overlay #toggle-quality-btn:hover {
+            background: var(--neon-green) !important;
+            color: #000000 !important;
+            box-shadow: 0 0 25px var(--neon-green) !important;
+        }
+
+        #settings-overlay #toggle-music-btn:hover {
+            background: var(--neon-green) !important;
+            color: #000000 !important;
+            box-shadow: 0 0 25px var(--neon-green) !important;
+        }
+
+        #settings-overlay #play-custom-settings-btn:hover {
+            background: var(--neon-blue) !important;
+            color: #000000 !important;
+            box-shadow: 0 0 25px var(--neon-blue) !important;
+        }
+
+        #settings-overlay #toggle-blast-unlock-btn:hover {
+            background: #ffae00 !important;
+            color: #000000 !important;
+            box-shadow: 0 0 25px #ff5e00 !important;
+        }
+
+        #settings-overlay #reset-progression-btn:hover {
+            background: var(--neon-blue) !important;
+            color: #000000 !important;
+            box-shadow: 0 0 25px var(--neon-blue) !important;
+        }
+
+        #settings-overlay #reset-scores-btn:hover {
+            background: var(--neon-pink) !important;
+            color: #000000 !important;
+            box-shadow: 0 0 25px var(--neon-pink) !important;
+        }
+
+        #settings-overlay #reset-learning-btn:hover {
+            background: var(--neon-yellow) !important;
+            color: #000000 !important;
+            box-shadow: 0 0 25px var(--neon-yellow) !important;
+        }
+
+        #settings-overlay #close-settings-btn:hover {
+            background: #ffffff !important;
+            color: #000000 !important;
+            box-shadow: 0 0 25px #ffffff !important;
+        }
+
+        #settings-overlay .btn-novice:hover {
+            background: var(--neon-green) !important;
+            color: #000000 !important;
+            box-shadow: 0 0 25px var(--neon-green) !important;
+        }
     </style>
 <body>
 
@@ -1713,7 +1783,7 @@
             </div>
 
             <button class="menu-btn btn-intro-play" id="intro-play-btn">JOUER</button>
-            <div class="intro-credits">Christophe DELATTRE - 2026 v3.5</div>
+            <div class="intro-credits">Christophe DELATTRE - 2026 v3.6</div>
         </div>
 
         <!-- Menu Principal (Sommaire) -->
